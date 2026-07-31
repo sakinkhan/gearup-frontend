@@ -1,3 +1,8 @@
+"use client";
+import React, { useActionState, useEffect, useState } from "react";
+import { AuthState, loginAction } from "../_actions/authAction";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,11 +17,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Marker, MarkerContent } from "@/components/ui/marker";
 import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
-export default function LoginPage() {
+const LoginForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [state, action, pending] = useActionState<AuthState | false, FormData>(
+    loginAction,
+    false,
+  );
+  const router = useRouter();
+  useEffect(() => {
+    if (!state) return;
+    if (state.success) {
+      toast.success(state.message || "Login Successful");
+      router.push("/dashboard/customer");
+    }
+    if (!state.success) {
+      toast.error(state.message || "Login Failed");
+    }
+  }, [state, router]);
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-sm">
+    <div className="w-full max-w-sm">
+      <Card>
         <CardHeader>
           <CardTitle className="text-center text-2xl font-bold">
             Login to your account
@@ -47,28 +69,54 @@ export default function LoginPage() {
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Type your password"
+                    className="pr-10"
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute inset-y-0 right-3 flex items-center text-muted-foreground hover:text-foreground"
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button type="submit" className="w-full">
-            Login
+            {pending ? "Logging in..." : "Login"}
           </Button>
           <Button variant="outline" className="w-full">
-            Login with Google
+            {pending ? "Logging in..." : "Login with Google"}
           </Button>
           <Marker variant="separator" className="mt-5">
             <MarkerContent>Don't have an account?</MarkerContent>
           </Marker>
           <CardAction className="mx-auto">
             <Button variant="link">
-              <Link href="/register">Sign Up</Link>
+              <Link href="/auth/register">Sign Up</Link>
             </Button>
           </CardAction>
         </CardFooter>
       </Card>
     </div>
   );
-}
+};
+
+export default LoginForm;

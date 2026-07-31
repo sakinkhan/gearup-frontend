@@ -1,13 +1,15 @@
 import { Navbar } from "@/components/ui/navbar";
+import { getMe } from "../service/getMe";
 
-export default function PublicLayout({
+export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getMe();
   return (
     <div>
-      <Navbar />
+      <Navbar user={user} />
       {children}
     </div>
   );

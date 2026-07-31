@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   FolderKanban,
-  BarChart3,
   Users,
   User,
   Settings,
@@ -28,14 +27,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggle";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { logout } from "@/app/service/logout";
+import { toast } from "sonner";
 
-// Primary navigation links, kept in an array for easy maintenance.
-const navLinks = [
-  { label: "Home", href: "/", icon: HomeIcon },
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Gears", href: "/gears", icon: FolderKanban },
-  { label: "Team", href: "/team", icon: Users },
-];
+// Roles supported by the app
+type UserRole = "customer" | "provider" | "admin";
+
+// Maps each role to its dashboard route
+const dashboardRouteByRole: Record<UserRole, string> = {
+  customer: "/dashboard/customer",
+  provider: "/dashboard/provider",
+  admin: "/dashboard/admin",
+};
 
 // User dropdown options, grouped for the menu.
 const userMenuGroups = [
@@ -47,24 +52,81 @@ const userMenuGroups = [
   [{ label: "Support", href: "/support", icon: LifeBuoy }],
 ];
 
+// TODO: replace this whole block with real auth state, e.g.:
+// const { user, isLoggedIn } = useAuth();
+// where user.role comes from your decoded JWT / session payload.
+const isLoggedIn = false;
 const user = {
   name: "Ava Carter",
   email: "ava@example.com",
   avatar: "/user-avatar.png",
+  role: "customer" as UserRole,
 };
 
-// TODO: replace with real auth state (e.g. useSession(), useAuth(), or a server-passed prop)
-const isLoggedIn = false;
+type IUser = {
+  success: boolean;
+  message: string;
+  data: {
+    profile: {
+      id: string;
+      name: string;
+      email: string;
+      activeStatus: string;
+      role: string;
+      createdAt: string;
+      updatedAt: string;
+      profile: {
+        id: string;
+        profilePhoto: string | null;
+        bio: string | null;
+        userId: string;
+        createdAt: string;
+        updatedAt: string;
+      };
+    };
+  };
+};
 
-export function Navbar() {
+type NavbarProps = {
+  user: IUser;
+};
+
+export function Navbar({ user }: NavbarProps) {
+  const router = useRouter();
+
+  console.log(user);
+
+  const handleUserMenuAction = async (action: string) => {
+    if (action === "logout") {
+      await logout();
+      toast.success("User Logged Out Successfully");
+      router.push("/auth/login");
+    }
+  };
   const pathname = usePathname();
+
+  // Dashboard route depends on the logged-in user's role.
+  const dashboardHref =
+    dashboardRouteByRole[user.data?.profile?.role as UserRole];
+
+  // Base nav links (always visible)
+  const navLinks = [
+    { label: "Home", href: "/", icon: HomeIcon },
+    { label: "Gears", href: "/gears", icon: FolderKanban },
+  ];
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <img src="Logo-transparent.png" alt="Logo" className="w-30" />
+          <Image
+            src="/Logo-transparent.png"
+            width={120}
+            height={50}
+            alt="Logo"
+          />
+          {/* <img src="Logo-transparent.png" alt="Logo" className="w-30" /> */}
         </Link>
 
         {/* Nav links */}
@@ -80,7 +142,8 @@ export function Navbar() {
                   asChild
                   className={cn(
                     "hover:bg-accent hover:text-accent-foreground",
-                    isActive && "bg-accent text-primary-foreground",
+                    isActive &&
+                      "bg-accent text-primary-foreground dark:text-primary",
                   )}
                 >
                   <Link href={link.href}>
@@ -93,6 +156,32 @@ export function Navbar() {
               </li>
             );
           })}
+
+          {/* Dashboard link — only visible when logged in, route depends on role */}
+          {isLoggedIn && (
+            <li key={dashboardHref}>
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                className={cn(
+                  "hover:bg-accent hover:text-accent-foreground",
+                  pathname === dashboardHref &&
+                    "bg-accent text-primary-foreground",
+                )}
+              >
+                <Link href={dashboardHref}>
+                  <LayoutDashboard
+                    className={cn(
+                      "size-4",
+                      pathname === dashboardHref && "text-primary",
+                    )}
+                  />
+                  Dashboard
+                </Link>
+              </Button>
+            </li>
+          )}
         </ul>
 
         {/* Auth area: user dropdown when logged in, Login/Register when not */}
@@ -107,11 +196,14 @@ export function Navbar() {
                 >
                   <Avatar className="size-9">
                     <AvatarImage
-                      src={user.avatar || "/placeholder.svg"}
-                      alt={user.name}
+                      src={
+                        user.data?.profile?.profile?.profilePhoto ||
+                        "/placeholder.svg"
+                      }
+                      alt={user.data?.profile?.name || "User Avatar"}
                     />
                     <AvatarFallback className="bg-primary text-primary-foreground font-medium">
-                      {user.name
+                      {user.data?.profile?.name
                         .split(" ")
                         .map((n) => n[0])
                         .join("")}
@@ -127,10 +219,10 @@ export function Navbar() {
                 <DropdownMenuLabel>
                   <div className="flex flex-col gap-0.5">
                     <span className="text-sm font-medium text-foreground">
-                      {user.name}
+                      {user.data?.profile?.name}
                     </span>
                     <span className="text-xs font-normal text-muted-foreground">
-                      {user.email}
+                      {user.data?.profile?.email}
                     </span>
                   </div>
                 </DropdownMenuLabel>
@@ -170,14 +262,14 @@ export function Navbar() {
           ) : (
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" asChild>
-                <Link href="/login">Login</Link>
+                <Link href="/auth/login">Login</Link>
               </Button>
               <Button
                 size="sm"
                 asChild
                 className="bg-primary text-primary-foreground hover:bg-primary/90"
               >
-                <Link href="/register">Register</Link>
+                <Link href="/auth/register">Register</Link>
               </Button>
             </div>
           )}
