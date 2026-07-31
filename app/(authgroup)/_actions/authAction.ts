@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { jwtDecode } from "jwt-decode";
 
 export type AuthState = {
   success: boolean;
@@ -14,7 +14,14 @@ export type AuthState = {
   };
 };
 
-// Shared: sets cookies + redirects based on decoded role
+type TokenPayload = {
+  id: string;
+  name: string;
+  email: string;
+  role: "CUSTOMER" | "PROVIDER" | "ADMIN";
+};
+
+// Shared: sets cookies + redirects based on user role
 const setSessionAndRedirect = async (
   accessToken: string,
   refreshToken: string,
@@ -26,20 +33,34 @@ const setSessionAndRedirect = async (
     maxAge: 60 * 60 * 24,
     sameSite: "lax",
   });
+
   cookieStore.set("refreshToken", refreshToken, {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 7,
     sameSite: "lax",
   });
 
-  const decodedToken = jwt.decode(accessToken) as JwtPayload;
+  let decodedToken: TokenPayload;
 
-  if (decodedToken.role === "CUSTOMER") {
-    redirect("/dashboard/customer", "replace");
-  } else if (decodedToken.role === "PROVIDER") {
-    redirect("/dashboard/provider", "replace");
-  } else if (decodedToken.role === "ADMIN") {
-    redirect("/dashboard/admin", "replace");
+  try {
+    decodedToken = jwtDecode<TokenPayload>(accessToken);
+  } catch (error) {
+    console.error("JWT decode failed:", error);
+    redirect("/auth/login");
+  }
+
+  switch (decodedToken.role) {
+    case "CUSTOMER":
+      redirect("/");
+
+    case "PROVIDER":
+      redirect("/dashboard/provider");
+
+    case "ADMIN":
+      redirect("/dashboard/admin");
+
+    default:
+      redirect("/auth/login");
   }
 };
 
@@ -50,11 +71,16 @@ export const loginAction = async (
   const email = formData.get("email");
   const password = formData.get("password");
 
-  const payload = { email, password };
+  const payload = {
+    email,
+    password,
+  };
 
   const res = await fetch(`${process.env.BACKEND_API_URL}/api/auth/login`, {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: {
+      "content-type": "application/json",
+    },
     body: JSON.stringify(payload),
   });
 
@@ -80,11 +106,19 @@ export const registerAction = async (
   const image = formData.get("image");
   const role = formData.get("role");
 
-  const payload = { name, email, password, image, role };
+  const payload = {
+    name,
+    email,
+    password,
+    image,
+    role,
+  };
 
   const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/register`, {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: {
+      "content-type": "application/json",
+    },
     body: JSON.stringify(payload),
   });
 

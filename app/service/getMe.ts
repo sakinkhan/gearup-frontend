@@ -13,7 +13,6 @@ export const getMe = async () => {
       message: "User not logged in",
     };
   }
-  console.log("Token being sent:", accessToken.value);
 
   const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/me`, {
     headers: {

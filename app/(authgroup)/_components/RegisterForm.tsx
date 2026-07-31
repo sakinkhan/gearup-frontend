@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { AuthState, registerAction } from "../_actions/authAction";
 
 const RegisterForm = () => {
+  const [role, setRole] = useState("CUSTOMER");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const items = [
@@ -36,8 +37,6 @@ const RegisterForm = () => {
     { label: "Author", value: "AUTHOR" },
     { label: "User", value: "USER" },
   ];
-
-  const [role, setRole] = useState("USER");
   const [state, action, pending] = useActionState<AuthState | false, FormData>(
     registerAction,
     false,
@@ -70,13 +69,20 @@ const RegisterForm = () => {
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" type="text" placeholder="John Doe" required />
+              <Input
+                id="name"
+                type="text"
+                name="name"
+                placeholder="Your Full Name"
+                required
+              />
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="email@example.com"
                 required
@@ -142,27 +148,28 @@ const RegisterForm = () => {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="role">Role</Label>
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Role" />
+
+              <Select value={role} onValueChange={setRole}>
+                <SelectTrigger id="role" className="w-full">
+                  <SelectValue placeholder="Select a role" />
                 </SelectTrigger>
+
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="customer">Customer</SelectItem>
-                    <SelectItem value="provider">Provider</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="CUSTOMER">Customer</SelectItem>
+                    <SelectItem value="PROVIDER">Provider</SelectItem>
+                    <SelectItem value="ADMIN">Admin</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
+
+              <input type="hidden" name="role" value={role} />
             </div>
           </div>
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button type="submit" className="w-full">
             Sign Up
-          </Button>
-          <Button variant="outline" className="w-full">
-            Sign Up with Google
           </Button>
           <Marker variant="separator" className="mt-5">
             <MarkerContent>Already have an account?</MarkerContent>

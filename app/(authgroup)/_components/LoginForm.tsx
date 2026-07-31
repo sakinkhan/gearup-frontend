@@ -1,7 +1,6 @@
 "use client";
 import React, { useActionState, useEffect, useState } from "react";
 import { AuthState, loginAction } from "../_actions/authAction";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,17 +24,15 @@ const LoginForm = () => {
     loginAction,
     false,
   );
-  const router = useRouter();
   useEffect(() => {
     if (!state) return;
     if (state.success) {
       toast.success(state.message || "Login Successful");
-      router.push("/dashboard/customer");
     }
     if (!state.success) {
       toast.error(state.message || "Login Failed");
     }
-  }, [state, router]);
+  }, [state]);
   return (
     <div className="w-full max-w-sm">
       <Card>
@@ -47,14 +44,15 @@ const LoginForm = () => {
             Enter your credentials below to login to your account
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form>
+        <form action={action}>
+          <CardContent>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
+                  name="email"
                   placeholder="m@example.com"
                   required
                 />
@@ -73,6 +71,7 @@ const LoginForm = () => {
                 <div className="relative">
                   <Input
                     id="password"
+                    name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Type your password"
                     className="pr-10"
@@ -96,24 +95,21 @@ const LoginForm = () => {
                 </div>
               </div>
             </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full">
-            {pending ? "Logging in..." : "Login"}
-          </Button>
-          <Button variant="outline" className="w-full">
-            {pending ? "Logging in..." : "Login with Google"}
-          </Button>
-          <Marker variant="separator" className="mt-5">
-            <MarkerContent>Don't have an account?</MarkerContent>
-          </Marker>
-          <CardAction className="mx-auto">
-            <Button variant="link">
-              <Link href="/auth/register">Sign Up</Link>
+          </CardContent>
+          <CardFooter className="flex-col gap-2 mt-8">
+            <Button type="submit" className="w-full">
+              {pending ? "Logging in..." : "Login"}
             </Button>
-          </CardAction>
-        </CardFooter>
+            <Marker variant="separator" className="mt-5">
+              <MarkerContent>Don't have an account?</MarkerContent>
+            </Marker>
+            <CardAction className="mx-auto">
+              <Button variant="link">
+                <Link href="/auth/register">Sign Up</Link>
+              </Button>
+            </CardAction>
+          </CardFooter>
+        </form>
       </Card>
     </div>
   );

@@ -1,17 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
-  LayoutDashboard,
-  FolderKanban,
-  Users,
-  User,
-  Settings,
   CreditCard,
+  FolderKanban,
+  HomeIcon,
+  LayoutDashboard,
   LifeBuoy,
   LogOut,
-  HomeIcon,
+  User,
+  Settings,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -25,24 +25,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggle";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { logout } from "@/app/service/logout";
 import { toast } from "sonner";
 
-// Roles supported by the app
-type UserRole = "customer" | "provider" | "admin";
+type UserRole = "CUSTOMER" | "PROVIDER" | "ADMIN";
 
-// Maps each role to its dashboard route
 const dashboardRouteByRole: Record<UserRole, string> = {
-  customer: "/dashboard/customer",
-  provider: "/dashboard/provider",
-  admin: "/dashboard/admin",
+  CUSTOMER: "/dashboard/customer",
+  PROVIDER: "/dashboard/provider",
+  ADMIN: "/dashboard/admin",
 };
 
-// User dropdown options, grouped for the menu.
 const userMenuGroups = [
   [
     { label: "Profile", href: "/profile", icon: User },
@@ -52,104 +48,77 @@ const userMenuGroups = [
   [{ label: "Support", href: "/support", icon: LifeBuoy }],
 ];
 
-// TODO: replace this whole block with real auth state, e.g.:
-// const { user, isLoggedIn } = useAuth();
-// where user.role comes from your decoded JWT / session payload.
-const isLoggedIn = false;
-const user = {
-  name: "Ava Carter",
-  email: "ava@example.com",
-  avatar: "/user-avatar.png",
-  role: "customer" as UserRole,
-};
-
-type IUser = {
-  success: boolean;
-  message: string;
-  data: {
-    profile: {
-      id: string;
-      name: string;
-      email: string;
-      activeStatus: string;
-      role: string;
-      createdAt: string;
-      updatedAt: string;
-      profile: {
-        id: string;
-        profilePhoto: string | null;
-        bio: string | null;
-        userId: string;
-        createdAt: string;
-        updatedAt: string;
-      };
-    };
-  };
+type NavbarUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  image?: string | null;
 };
 
 type NavbarProps = {
-  user: IUser;
+  user: NavbarUser | null;
 };
 
 export function Navbar({ user }: NavbarProps) {
+  const pathname = usePathname();
   const router = useRouter();
 
-  console.log(user);
+  const isLoggedIn = !!user;
 
-  const handleUserMenuAction = async (action: string) => {
-    if (action === "logout") {
-      await logout();
-      toast.success("User Logged Out Successfully");
-      router.push("/auth/login");
-    }
-  };
-  const pathname = usePathname();
+  const dashboardHref = user ? dashboardRouteByRole[user.role] : "";
 
-  // Dashboard route depends on the logged-in user's role.
-  const dashboardHref =
-    dashboardRouteByRole[user.data?.profile?.role as UserRole];
-
-  // Base nav links (always visible)
   const navLinks = [
-    { label: "Home", href: "/", icon: HomeIcon },
-    { label: "Gears", href: "/gears", icon: FolderKanban },
+    {
+      label: "Home",
+      href: "/",
+      icon: HomeIcon,
+    },
+    {
+      label: "Gears",
+      href: "/gears",
+      icon: FolderKanban,
+    },
   ];
 
+  const handleLogout = async () => {
+    await logout();
+
+    toast.success("Logged out successfully");
+
+    router.push("/");
+    router.refresh();
+  };
+
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur">
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center">
           <Image
             src="/Logo-transparent.png"
             width={120}
             height={50}
-            alt="Logo"
+            alt="GearUp Logo"
           />
-          {/* <img src="Logo-transparent.png" alt="Logo" className="w-30" /> */}
         </Link>
 
-        {/* Nav links */}
+        {/* Navigation */}
         <ul className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => {
             const Icon = link.icon;
-            const isActive = pathname === link.href;
+            const active = pathname === link.href;
+
             return (
               <li key={link.href}>
                 <Button
                   variant="ghost"
                   size="sm"
                   asChild
-                  className={cn(
-                    "hover:bg-accent hover:text-accent-foreground",
-                    isActive &&
-                      "bg-accent text-primary-foreground dark:text-primary",
-                  )}
+                  className={cn(active && "bg-accent text-primary")}
                 >
                   <Link href={link.href}>
-                    <Icon
-                      className={cn("size-4", isActive && "text-primary")}
-                    />
+                    <Icon className="size-4" />
                     {link.label}
                   </Link>
                 </Button>
@@ -157,26 +126,18 @@ export function Navbar({ user }: NavbarProps) {
             );
           })}
 
-          {/* Dashboard link — only visible when logged in, route depends on role */}
           {isLoggedIn && (
-            <li key={dashboardHref}>
+            <li>
               <Button
                 variant="ghost"
                 size="sm"
                 asChild
                 className={cn(
-                  "hover:bg-accent hover:text-accent-foreground",
-                  pathname === dashboardHref &&
-                    "bg-accent text-primary-foreground",
+                  pathname === dashboardHref && "bg-accent text-primary",
                 )}
               >
                 <Link href={dashboardHref}>
-                  <LayoutDashboard
-                    className={cn(
-                      "size-4",
-                      pathname === dashboardHref && "text-primary",
-                    )}
-                  />
+                  <LayoutDashboard className="size-4" />
                   Dashboard
                 </Link>
               </Button>
@@ -184,76 +145,70 @@ export function Navbar({ user }: NavbarProps) {
           )}
         </ul>
 
-        {/* Auth area: user dropdown when logged in, Login/Register when not */}
+        {/* Right side */}
         <div className="flex items-center gap-2">
           <ThemeToggle />
+
           {isLoggedIn ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="size-9 rounded-full p-0 ring-offset-background hover:ring-2 hover:ring-ring"
-                >
+                <Button variant="ghost" className="size-9 rounded-full p-0">
                   <Avatar className="size-9">
-                    <AvatarImage
-                      src={
-                        user.data?.profile?.profile?.profilePhoto ||
-                        "/placeholder.svg"
-                      }
-                      alt={user.data?.profile?.name || "User Avatar"}
-                    />
-                    <AvatarFallback className="bg-primary text-primary-foreground font-medium">
-                      {user.data?.profile?.name
+                    <AvatarImage src={user.image || ""} alt={user.name} />
+
+                    <AvatarFallback className="bg-primary text-primary-foreground">
+                      {user.name
                         .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
+                        .map((name) => name[0])
+                        .join("")
+                        .toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="sr-only">Open user menu</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-56 bg-popover text-popover-foreground"
-              >
+
+              <DropdownMenuContent align="end" className="w-56">
+                {/* User info */}
                 <DropdownMenuLabel>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-sm font-medium text-foreground">
-                      {user.data?.profile?.name}
-                    </span>
-                    <span className="text-xs font-normal text-muted-foreground">
-                      {user.data?.profile?.email}
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm font-medium">{user.name}</span>
+
+                    <span className="text-xs text-muted-foreground">
+                      {user.email}
                     </span>
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-border" />
-                {userMenuGroups.map((group, i) => (
-                  <div key={i}>
-                    <DropdownMenuGroup>
-                      {group.map((item) => {
-                        const Icon = item.icon;
-                        return (
-                          <DropdownMenuItem
-                            key={item.href}
-                            asChild
-                            className="focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <Link href={item.href}>
-                              <Icon className="size-4" />
-                              {item.label}
-                            </Link>
-                          </DropdownMenuItem>
-                        );
-                      })}
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator className="bg-border" />
-                  </div>
-                ))}
-                <DropdownMenuItem
-                  variant="destructive"
-                  className="text-destructive focus:bg-destructive/10 focus:text-destructive"
-                  onSelect={() => console.log("[v0] Sign out clicked")}
-                >
+
+                <DropdownMenuSeparator />
+
+                {/* Middle menu */}
+                <DropdownMenuGroup>
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">
+                      <User className="size-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link href="/billing">
+                      <CreditCard className="size-4" />
+                      Billing
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link href="/settings">
+                      <Settings className="size-4" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+
+                <DropdownMenuSeparator />
+
+                {/* Bottom logout */}
+                <DropdownMenuItem variant="destructive" onSelect={handleLogout}>
                   <LogOut className="size-4" />
                   Sign out
                 </DropdownMenuItem>
@@ -264,11 +219,8 @@ export function Navbar({ user }: NavbarProps) {
               <Button variant="outline" size="sm" asChild>
                 <Link href="/auth/login">Login</Link>
               </Button>
-              <Button
-                size="sm"
-                asChild
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-              >
+
+              <Button size="sm" asChild>
                 <Link href="/auth/register">Register</Link>
               </Button>
             </div>

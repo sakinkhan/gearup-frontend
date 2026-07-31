@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/ui/navbar";
 import { getMe } from "../service/getMe";
+import { NavbarWrapper } from "@/components/ui/navbar-wrapper";
 
 export default async function PublicLayout({
   children,
@@ -9,7 +10,7 @@ export default async function PublicLayout({
   const user = await getMe();
   return (
     <div>
-      <Navbar user={user} />
+      <NavbarWrapper />
       {children}
     </div>
   );
