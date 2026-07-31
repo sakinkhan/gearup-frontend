@@ -1,7 +1,11 @@
 import React from "react";
 
-const GearsByIdPage = () => {
-  return <div>GearsByIdPage</div>;
+const GearsByIdPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { id } = await params;
+  return <div>My Gear: {id}</div>;
 };
-
 export default GearsByIdPage;

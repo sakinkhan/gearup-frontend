@@ -1,12 +1,7 @@
 import React from "react";
 
 const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div>
-      AuthLayout
-      {children}
-    </div>
-  );
+  return <div>{children}</div>;
 };
 
 export default AuthLayout;

@@ -2,6 +2,7 @@ import "./globals.css";
 import { Roboto_Slab, Oxanium } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "next-themes";
 
 const oxaniumHeading = Oxanium({
   subsets: ["latin"],
@@ -31,8 +32,11 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
-        {children}
-        <Toaster richColors position="bottom-center" />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+          <Toaster richColors position="bottom-center" />
+          <div>Footer</div>
+        </ThemeProvider>
       </body>
     </html>
   );
