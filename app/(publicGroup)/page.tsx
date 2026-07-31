@@ -2,7 +2,7 @@ import GlobalLoading from "../loading";
 
 export default function Home() {
   return (
-    <div>
+    <div className="">
       Welcome to GearUp
       <GlobalLoading />
     </div>
