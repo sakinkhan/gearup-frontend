@@ -45,9 +45,7 @@ export function GearCard({ gear, className }: GearCardProps) {
           <Badge
             className={cn(
               "absolute left-2 top-2",
-              isAvailable
-                ? "bg-green-600 hover:bg-green-600"
-                : "bg-muted-foreground",
+              isAvailable ? "bg-primary" : "bg-muted-foreground",
             )}
           >
             {isAvailable

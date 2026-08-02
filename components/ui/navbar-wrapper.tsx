@@ -2,7 +2,13 @@ import { getCurrentUser } from "@/app/utils/getCurrentUser";
 import { Navbar } from "./navbar";
 
 export async function NavbarWrapper() {
-  const user = await getCurrentUser();
+  let user = null;
+
+  try {
+    user = await getCurrentUser();
+  } catch (err) {
+    console.error("NavbarWrapper: failed to load current user", err);
+  }
 
   return <Navbar user={user} />;
 }

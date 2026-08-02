@@ -4,7 +4,11 @@ import { cookies } from "next/headers";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
-export const getMe = async () => {
+type GetMeResult =
+  | { success: true; data: any }
+  | { success: false; message: string };
+
+export const getMe = async (): Promise<GetMeResult> => {
   if (!API_URL) {
     throw new Error(
       "NEXT_PUBLIC_BACKEND_API_URL is not set. Check .env.local exists in the project root and restart the dev server.",
@@ -12,8 +16,8 @@ export const getMe = async () => {
   }
 
   const cookieStore = await cookies();
-
   const accessToken = cookieStore.get("accessToken");
+
   if (!accessToken?.value) {
     return {
       success: false,
@@ -21,18 +25,36 @@ export const getMe = async () => {
     };
   }
 
-  const res = await fetch(`${API_URL}/users/me`, {
-    headers: {
-      Cookie: `accessToken=${accessToken.value}`,
-    },
-    cache: "no-store",
-  });
+  try {
+    const res = await fetch(`${API_URL}/users/me`, {
+      headers: {
+        Cookie: `accessToken=${accessToken.value}`,
+      },
+      cache: "no-store",
+    });
 
-  if (!res.ok) {
-    const errorBody = await res.text();
-    console.error("getMe failed:", res.status, errorBody);
-    throw new Error("Failed to fetch user data");
+    if (!res.ok) {
+      const errorBody = await res.text();
+      console.error("getMe failed:", res.status, errorBody);
+      return {
+        success: false,
+        message:
+          res.status === 401
+            ? "Session expired, please log in again"
+            : "Failed to fetch user data",
+      };
+    }
+
+    const json = await res.json();
+    return {
+      success: true,
+      data: json.data ?? json,
+    };
+  } catch (err) {
+    console.error("getMe network error:", err);
+    return {
+      success: false,
+      message: "Unable to reach server",
+    };
   }
-
-  return res.json();
 };
