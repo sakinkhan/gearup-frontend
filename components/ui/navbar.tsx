@@ -30,6 +30,7 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggle";
 import { logout } from "@/app/service/logout";
 import { toast } from "sonner";
+import GearUpLogo from "./gearup-logo";
 
 type UserRole = "CUSTOMER" | "PROVIDER" | "ADMIN";
 
@@ -95,12 +96,7 @@ export function Navbar({ user }: NavbarProps) {
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <Image
-            src="/Logo-transparent.png"
-            width={120}
-            height={50}
-            alt="GearUp Logo"
-          />
+          <GearUpLogo />
         </Link>
 
         {/* Navigation */}
