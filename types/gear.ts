@@ -1,5 +1,6 @@
 export type GearStatus = "AVAILABLE" | "UNAVAILABLE" | "INACTIVE";
 export type GearCondition = "NEW" | "USED";
+export type UserRole = "CUSTOMER" | "PROVIDER" | "ADMIN";
 
 export interface Review {
   id: string;
@@ -16,7 +17,7 @@ export interface GearProvider {
   phone?: string | null;
   address?: string | null;
   image?: string | null;
-  role: "CUSTOMER" | "PROVIDER" | "ADMIN";
+  role: UserRole;
   status: string;
 }
 
@@ -27,8 +28,8 @@ export interface Gear {
   name: string;
   brand: string;
   description: string;
-  rentalPricePerDay: string; // numeric string from API
-  depositAmount: string; // numeric string from API
+  rentalPricePerDay: string;
+  depositAmount: string;
   stock: number;
   availableStock: number;
   condition: GearCondition;
@@ -50,6 +51,14 @@ export interface GearFilters {
   startDate?: string;
   endDate?: string;
   page?: number;
+  limit?: number;
+}
+
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
 }
 
 export interface ApiResponse<T> {
@@ -57,10 +66,5 @@ export interface ApiResponse<T> {
   statusCode: number;
   message: string;
   data: T;
-  meta?: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  meta?: PaginationMeta;
 }

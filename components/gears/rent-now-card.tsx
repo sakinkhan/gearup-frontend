@@ -62,7 +62,7 @@ export function RentNowCard({ gear }: { gear: Gear }) {
 
   const handleRent = async () => {
     if (!range?.from || !range?.to) {
-      toast.error("Please select a rental date range");
+      toast.error("Please select a Rental Date range");
       return;
     }
 

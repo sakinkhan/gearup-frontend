@@ -28,7 +28,7 @@ import { useCategories } from "@/hooks/use-categories";
 import type { GearFilters } from "@/types/gear";
 import { useGearBrands } from "@/hooks/use-gear-brands";
 
-const MAX_PRICE = 5000;
+const MAX_PRICE = 500;
 
 type GearFiltersSidebarProps = {
   filters: GearFilters;
