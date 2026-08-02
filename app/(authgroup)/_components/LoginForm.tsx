@@ -97,7 +97,7 @@ const LoginForm = () => {
             </div>
           </CardContent>
           <CardFooter className="flex-col gap-2 mt-8">
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={pending}>
               {pending ? "Logging in..." : "Login"}
             </Button>
             <Marker variant="separator" className="mt-5">

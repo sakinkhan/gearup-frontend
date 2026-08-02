@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryProvider } from "./providers";
 
 const oxaniumHeading = Oxanium({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-theme="light"
+      suppressHydrationWarning
       className={cn(
         "h-full",
         "antialiased",
@@ -34,9 +36,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TooltipProvider>{children}</TooltipProvider>
-          <Toaster richColors position="bottom-center" />
-          <div>Footer</div>
+          <QueryProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+            <Toaster richColors position="bottom-center" />
+            <div>Footer</div>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

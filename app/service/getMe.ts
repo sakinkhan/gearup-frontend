@@ -2,28 +2,30 @@
 
 import { cookies } from "next/headers";
 
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+
 export const getMe = async () => {
+  if (!API_URL) {
+    throw new Error(
+      "NEXT_PUBLIC_BACKEND_API_URL is not set. Check .env.local exists in the project root and restart the dev server.",
+    );
+  }
+
   const cookieStore = await cookies();
 
   const accessToken = cookieStore.get("accessToken");
   if (!accessToken?.value) {
-    //
     return {
       success: false,
       message: "User not logged in",
     };
   }
 
-  const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/me`, {
+  const res = await fetch(`${API_URL}/users/me`, {
     headers: {
-      // Authorization: `Bearer ${accessToken.value}`,
       Cookie: `accessToken=${accessToken.value}`,
     },
     cache: "no-store",
-    next: {
-      revalidate: 60 * 60 * 24, // Revalidate every 24 hours
-      tags: ["my-profile"],
-    },
   });
 
   if (!res.ok) {

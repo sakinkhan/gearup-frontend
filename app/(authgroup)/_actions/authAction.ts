@@ -76,13 +76,16 @@ export const loginAction = async (
     password,
   };
 
-  const res = await fetch(`${process.env.BACKEND_API_URL}/api/auth/login`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/login`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(payload),
     },
-    body: JSON.stringify(payload),
-  });
+  );
 
   const result = await res.json();
 
@@ -114,13 +117,16 @@ export const registerAction = async (
     role,
   };
 
-  const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/register`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/users/register`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(payload),
     },
-    body: JSON.stringify(payload),
-  });
+  );
 
   const result = await res.json();
 

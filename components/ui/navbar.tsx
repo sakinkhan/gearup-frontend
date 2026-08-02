@@ -92,15 +92,15 @@ export function Navbar({ user }: NavbarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur">
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/90 backdrop-blur">
+      <nav className="mx-auto grid h-16 max-w-6xl grid-cols-3 items-center px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <GearUpLogo />
         </Link>
 
         {/* Navigation */}
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center justify-center gap-1 md:flex">
           {navLinks.map((link) => {
             const Icon = link.icon;
             const active = pathname === link.href;
@@ -142,7 +142,7 @@ export function Navbar({ user }: NavbarProps) {
         </ul>
 
         {/* Right side */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-end gap-2">
           <ThemeToggle />
 
           {isLoggedIn ? (

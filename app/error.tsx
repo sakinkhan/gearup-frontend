@@ -99,7 +99,7 @@ export default function Error({
           </svg>
         </div>
 
-        <span className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-chart-3">
+        <span className="mb-3 text-xs font-semibold tracking-[0.3em] text-chart-3">
           Error 500 • GearUp
         </span>
 
