@@ -20,14 +20,13 @@ type GearGridProps = {
   isFetching?: boolean;
   isError?: boolean;
   onRetry?: () => void;
-
   page: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 };
 
 export function GearGrid({
-  gears,
+  gears = [],
   isLoading,
   isFetching,
   isError,
@@ -39,13 +38,14 @@ export function GearGrid({
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <GearCardSkeleton key={i} />
+        {Array.from({ length: 8 }).map((_, index) => (
+          <GearCardSkeleton key={index} />
         ))}
       </div>
     );
   }
 
+  // Only show error when request actually fails
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border py-24 text-center">
@@ -53,8 +53,9 @@ export function GearGrid({
 
         <div>
           <p className="font-medium text-foreground">Something went wrong</p>
+
           <p className="text-sm text-muted-foreground">
-            We couldn&apos;t load gears right now.
+            We couldn't load gears right now.
           </p>
         </div>
 
@@ -67,13 +68,15 @@ export function GearGrid({
     );
   }
 
-  if (!gears || gears.length === 0) {
+  // Empty API response is not an error
+  if (gears.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border py-24 text-center">
         <PackageSearch className="size-10 text-muted-foreground" />
 
         <div>
           <p className="font-medium text-foreground">No gear found</p>
+
           <p className="text-sm text-muted-foreground">
             Try adjusting your filters or search terms.
           </p>
@@ -100,8 +103,8 @@ export function GearGrid({
             <PaginationItem>
               <PaginationPrevious
                 href="#"
-                onClick={(e) => {
-                  e.preventDefault();
+                onClick={(event) => {
+                  event.preventDefault();
 
                   if (page > 1) {
                     onPageChange(page - 1);
@@ -121,8 +124,8 @@ export function GearGrid({
                   <PaginationLink
                     href="#"
                     isActive={page === pageNumber}
-                    onClick={(e) => {
-                      e.preventDefault();
+                    onClick={(event) => {
+                      event.preventDefault();
                       onPageChange(pageNumber);
                     }}
                   >
@@ -135,8 +138,8 @@ export function GearGrid({
             <PaginationItem>
               <PaginationNext
                 href="#"
-                onClick={(e) => {
-                  e.preventDefault();
+                onClick={(event) => {
+                  event.preventDefault();
 
                   if (page < totalPages) {
                     onPageChange(page + 1);

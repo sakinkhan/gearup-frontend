@@ -86,7 +86,7 @@ export function GearFiltersSidebar({
         <Input
           id="search"
           placeholder="Search gear..."
-          defaultValue={filters.search}
+          value={filters.search ?? ""}
           onChange={(e) => onChange({ search: e.target.value })}
         />
       </div>
@@ -101,13 +101,21 @@ export function GearFiltersSidebar({
             onChange({ categoryName: value === "all" ? undefined : value })
           }
         >
-          <SelectTrigger>
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="All categories" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All categories</SelectItem>
+
+          <SelectContent className="w-full min-w-(--radix-select-trigger-width)">
+            <SelectItem className="w-full" value="all">
+              All categories
+            </SelectItem>
+
             {categories.map((category) => (
-              <SelectItem key={category.id} value={category.name}>
+              <SelectItem
+                key={category.id}
+                className="w-full"
+                value={category.name}
+              >
                 {category.name}
               </SelectItem>
             ))}
@@ -123,13 +131,15 @@ export function GearFiltersSidebar({
             onChange({ brand: value === "all" ? undefined : value })
           }
         >
-          <SelectTrigger>
+          <SelectTrigger className="w-full min-w-(--radix-select-trigger-width)">
             <SelectValue placeholder="All brands" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All brands</SelectItem>
+            <SelectItem value="all" className="w-full">
+              All brands
+            </SelectItem>
             {brands.map((brand) => (
-              <SelectItem key={brand} value={brand}>
+              <SelectItem className="w-full" key={brand} value={brand}>
                 {brand}
               </SelectItem>
             ))}

@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { GearGallery } from "@/components/gears/gear-gallery";
 import { GearSpecs } from "@/components/gears/gear-specs";
 import { RentNowCard } from "@/components/gears/rent-now-card";
+import { ProviderInfo } from "@/components/gears/provider-info";
 
 export default async function GearDetailsPage({
   params,
@@ -50,9 +51,7 @@ export default async function GearDetailsPage({
           </div>
 
           <GearSpecs gear={gear} />
-
-          {/* Provider info not yet available from API — only providerId is returned.
-              Re-add this block once a provider-details endpoint exists. */}
+          <ProviderInfo provider={gear.provider} />
         </div>
 
         <div className="lg:sticky lg:top-20 lg:h-fit">
