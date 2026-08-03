@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getCurrentUser, updateCurrentUser } from "@/lib/api/user";
+import { getCurrentUserClient, updateCurrentUser } from "@/lib/api/user";
 import { UpdateUserPayload, User } from "@/types/user";
 import { toast } from "sonner";
 
@@ -10,7 +10,7 @@ export const CURRENT_USER_KEY = ["currentUser"] as const;
 export function useCurrentUser() {
   return useQuery({
     queryKey: CURRENT_USER_KEY,
-    queryFn: getCurrentUser,
+    queryFn: getCurrentUserClient,
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });

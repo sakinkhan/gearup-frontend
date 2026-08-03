@@ -1,8 +1,7 @@
 import { ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
 
-import FeaturedCarousel from "./featured-carousel";
 import { Gear } from "@/types/gear";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import HeroSlideshow from "./hero-slideshow";
 
 async function getGears(): Promise<Gear[]> {
@@ -32,8 +31,8 @@ export default async function HeroSection() {
         </div>
 
         <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-          Rent the gear you need.
-          <span className="block text-primary">Adventure starts here.</span>
+          Rent the gear you need...
+          <span className="block text-primary">Adventure starts here!</span>
         </h1>
 
         <p className="mx-auto max-w-xl text-base text-muted-foreground sm:text-lg lg:mx-0">
@@ -43,7 +42,7 @@ export default async function HeroSection() {
         </p>
 
         {/* Buttons */}
-        <div className="flex lg:flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+        <div className="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
           <Button className="flex items-center justify-center gap-2 px-6 py-3 font-semibold">
             Explore Gears
             <ArrowRight className="size-5" />

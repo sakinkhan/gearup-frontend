@@ -25,19 +25,14 @@ export default function FeaturedCard({ gear, index }: Props) {
         y: -12,
         scale: 1.03,
       }}
-      className="relative w-65 sm:w-72 rounded-2xl border bg-card p-2 shadow-xl"
-      style={{ rotate: `${index === 1 ? 0 : (index - 1) * 5}deg` }}
+      className="relative w-64 sm:w-72 rounded-2xl border bg-card p-4 shadow-xl"
     >
-      <button className="absolute right-5 top-5">
-        <Heart className="size-5 text-muted-foreground" />
-      </button>
-
       <div className="relative h-52">
         <Image
           fill
           src={gear.image || "/placeholder.png"}
           alt={gear.name}
-          className="object-contain rounded-xl"
+          className="object-contain rounded-2xl"
           sizes="288px"
         />
       </div>

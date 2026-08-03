@@ -1,17 +1,24 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { fetchGearById } from "@/lib/api/gears";
 import { Badge } from "@/components/ui/badge";
 import { GearGallery } from "@/components/gears/gear-gallery";
 import { GearSpecs } from "@/components/gears/gear-specs";
 import { RentNowCard } from "@/components/gears/rent-now-card";
 import { ProviderInfo } from "@/components/gears/provider-info";
+import { requireAuth } from "@/lib/validations/require-auth";
 
-export default async function GearDetailsPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+type Props = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+
+export default async function GearDetailsPage({ params }: Props) {
   const { id } = await params;
+  const user = await requireAuth();
+  if (!user) {
+    redirect(`/auth/login?message=login-required&redirect=/gears/${id}`);
+  }
 
   let gear;
   try {

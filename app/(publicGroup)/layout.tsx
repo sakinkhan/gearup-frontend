@@ -7,10 +7,10 @@ export default async function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <>
       <NavbarWrapper />
-      {children}
+      <main>{children}</main>
       <Footer />
-    </div>
+    </>
   );
 }
