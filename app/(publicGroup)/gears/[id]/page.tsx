@@ -1,11 +1,11 @@
 import { notFound, redirect } from "next/navigation";
-import { fetchGearById } from "@/lib/api/gears";
 import { Badge } from "@/components/ui/badge";
 import { GearGallery } from "@/components/gears/gear-gallery";
 import { GearSpecs } from "@/components/gears/gear-specs";
 import { RentNowCard } from "@/components/gears/rent-now-card";
 import { ProviderInfo } from "@/components/gears/provider-info";
 import { requireAuth } from "@/lib/validations/require-auth";
+import { fetchGearById } from "@/lib/api/server/gears";
 
 type Props = {
   params: Promise<{
@@ -15,16 +15,21 @@ type Props = {
 
 export default async function GearDetailsPage({ params }: Props) {
   const { id } = await params;
-  const user = await requireAuth();
-  if (!user) {
-    redirect(`/auth/login?message=login-required&redirect=/gears/${id}`);
-  }
+
+  await requireAuth(`/gears/${id}`);
 
   let gear;
+  // try {
+  //   gear = await fetchGearById(id);
+  // } catch {
+  //   notFound();
+  // }
+
   try {
     gear = await fetchGearById(id);
-  } catch {
-    notFound();
+  } catch (error) {
+    console.error("FETCH GEAR ERROR:", error);
+    throw error;
   }
 
   if (!gear) {

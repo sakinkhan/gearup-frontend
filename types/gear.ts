@@ -21,25 +21,46 @@ export interface GearProvider {
   status: string;
 }
 
-export interface Gear {
+export type Gear = {
   id: string;
   providerId: string;
+
   categoryName: string;
   name: string;
   brand: string;
   description: string;
-  rentalPricePerDay: string;
-  depositAmount: string;
+
+  rentalPricePerDay: string | number;
+  depositAmount: string | number;
+
   stock: number;
   availableStock: number;
-  condition: GearCondition;
-  status: GearStatus;
+
+  condition: "NEW" | "GOOD" | "FAIR" | "USED";
+  status: "AVAILABLE" | "UNAVAILABLE" | "INACTIVE";
+
   image: string;
+
   createdAt: string;
   updatedAt: string;
-  provider: GearProvider;
-  reviews: Review[];
-}
+
+  provider: {
+    id: string;
+    name: string;
+    email: string;
+    phone?: string | null;
+    address?: string | null;
+    image?: string | null;
+    role: "CUSTOMER" | "PROVIDER" | "ADMIN";
+    status: string;
+  };
+
+  reviews: {
+    id?: string;
+    rating: number;
+    comment?: string;
+  }[];
+};
 
 export interface GearFilters {
   search?: string;

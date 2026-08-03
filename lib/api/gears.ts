@@ -45,6 +45,7 @@ function buildQuery(filters: GearFilters = {}) {
   return params.toString();
 }
 
+// Public API
 export async function fetchGears(
   filters: GearFilters = {},
 ): Promise<ApiResponse<Gear[]>> {
@@ -57,24 +58,14 @@ export async function fetchGears(
   });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch gears");
+    const errorBody = await res.text();
+
+    console.error("FETCH GEARS FAILED:", res.status, errorBody);
+
+    throw new Error(`Failed to fetch gears (${res.status})`);
   }
 
   return res.json();
-}
-
-export async function fetchGearById(id: string): Promise<Gear> {
-  const res = await fetch(`${API_URL}/gears/${id}`, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch gear");
-  }
-
-  const result: ApiResponse<Gear> = await res.json();
-
-  return result.data;
 }
 
 export function toNumber(value: string | number): number {

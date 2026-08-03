@@ -1,11 +1,15 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "../auth/get-current-user";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
 
-export async function requireAuth() {
+export async function requireAuth(redirectPath?: string) {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/auth/login");
+    redirect(
+      redirectPath
+        ? `/auth/login?message=login-required&redirect=${redirectPath}`
+        : "/auth/login",
+    );
   }
 
   return user;

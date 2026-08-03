@@ -16,6 +16,11 @@ const robotoSlab = Roboto_Slab({
   variable: "--font-serif",
 });
 
+export const metadata = {
+  title: "GearUp - Rent Your Gear",
+  description: "Rent sports and outdoor equipment easily with GearUp.",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
