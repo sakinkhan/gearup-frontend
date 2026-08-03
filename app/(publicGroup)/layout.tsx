@@ -1,4 +1,5 @@
-import { NavbarWrapper } from "@/components/ui/navbar-wrapper";
+import { NavbarWrapper } from "@/components/navbar/navbar-wrapper";
+import { Footer } from "@/components/ui/footer";
 
 export default async function PublicLayout({
   children,
@@ -9,6 +10,7 @@ export default async function PublicLayout({
     <div>
       <NavbarWrapper />
       {children}
+      <Footer />
     </div>
   );
 }

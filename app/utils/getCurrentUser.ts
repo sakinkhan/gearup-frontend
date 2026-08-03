@@ -1,14 +1,17 @@
 import { cookies } from "next/headers";
-import { jwtDecode } from "jwt-decode";
 
-type UserPayload = {
+export type CurrentUser = {
   id: string;
   name: string;
   email: string;
+  phone?: string | null;
+  address?: string | null;
+  image?: string | null;
   role: "CUSTOMER" | "PROVIDER" | "ADMIN";
+  status: string;
 };
 
-export async function getCurrentUser() {
+export async function getCurrentUser(): Promise<CurrentUser | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get("accessToken")?.value;
 
@@ -17,8 +20,25 @@ export async function getCurrentUser() {
   }
 
   try {
-    return jwtDecode<UserPayload>(token);
-  } catch {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/users/me`,
+      {
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+        cache: "no-store",
+      },
+    );
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const data = await res.json();
+
+    return data.data.profile as CurrentUser;
+  } catch (error) {
+    console.error("Failed to fetch current user:", error);
     return null;
   }
 }
