@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
-    dashboardLink,
+  dashboardLink,
   dashboardRouteByRole,
   navLinks,
 } from "@/app/utils/navbar-utils/nav-links";
@@ -19,6 +19,8 @@ type Props = {
 export default function DesktopNav({ user }: Props) {
   const pathname = usePathname();
   const DashboardIcon = dashboardLink.icon;
+
+  console.log("USER:", user);
 
   const dashboardHref = user ? dashboardRouteByRole[user.role] : "";
 

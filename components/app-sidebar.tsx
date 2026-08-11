@@ -18,94 +18,65 @@ import {
   Boxes,
   ClipboardList,
   Users,
+  type LucideIcon,
 } from "lucide-react";
 import { CurrentUser } from "@/lib/auth/get-current-user";
 import Link from "next/link";
 import GearUpLogo from "./ui/gearup-logo";
 import Image from "next/image";
 
-const customerMenu = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Rental Orders",
-    url: "/dashboard/orders",
-    icon: Package,
-  },
-  {
-    title: "Payment History",
-    url: "/dashboard/payments",
-    icon: CreditCard,
-  },
-  {
-    title: "My Reviews",
-    url: "/dashboard/reviews",
-    icon: Star,
-  },
-];
+type MenuItem = {
+  title: string;
+  path: string; // relative to the role's dashboard root, "" = the root itself
+  icon: LucideIcon;
+};
 
-const providerMenu = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "My Gear",
-    url: "/dashboard/gears",
-    icon: Boxes,
-  },
-  {
-    title: "Active Rentals",
-    url: "/dashboard/rentals",
-    icon: ClipboardList,
-  },
-  {
-    title: "Pending Orders",
-    url: "/dashboard/pending-orders",
-    icon: Package,
-  },
-];
+type Role = CurrentUser["role"];
 
-const adminMenu = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Users",
-    url: "/dashboard/users",
-    icon: Users,
-  },
-  {
-    title: "Gear",
-    url: "/dashboard/gears",
-    icon: Boxes,
-  },
-  {
-    title: "Rentals",
-    url: "/dashboard/rentals",
-    icon: ClipboardList,
-  },
-];
+const roleBasePath: Record<Role, string> = {
+  ADMIN: "/dashboard/admin",
+  PROVIDER: "/dashboard/provider",
+  CUSTOMER: "/dashboard/customer",
+};
+
+const roleMenuItems: Record<Role, MenuItem[]> = {
+  CUSTOMER: [
+    { title: "Dashboard", path: "", icon: LayoutDashboard },
+    { title: "Rental Orders", path: "/rentals", icon: Package },
+    { title: "Payment History", path: "/payments", icon: CreditCard },
+    { title: "My Reviews", path: "/reviews", icon: Star },
+  ],
+  PROVIDER: [
+    { title: "Dashboard", path: "", icon: LayoutDashboard },
+    { title: "My Gear", path: "/gears", icon: Boxes },
+    { title: "Active Rentals", path: "/rentals", icon: ClipboardList },
+    { title: "Pending Orders", path: "/pending-orders", icon: Package },
+  ],
+  ADMIN: [
+    { title: "Dashboard", path: "", icon: LayoutDashboard },
+    { title: "Users", path: "/users", icon: Users },
+    { title: "Gear", path: "/gears", icon: Boxes },
+    { title: "Rentals", path: "/rentals", icon: ClipboardList },
+  ],
+};
+
+function buildMenu(role: Role) {
+  const base = roleBasePath[role];
+  return roleMenuItems[role].map((item) => ({
+    title: item.title,
+    icon: item.icon,
+    url: `${base}${item.path}`,
+  }));
+}
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user: CurrentUser;
 }
 
 export function AppSidebar({ user, ...props }: AppSidebarProps) {
-  const items =
-    user.role === "ADMIN"
-      ? adminMenu
-      : user.role === "PROVIDER"
-        ? providerMenu
-        : customerMenu;
-
+  const items = buildMenu(user.role);
   const { state } = useSidebar();
+  console.log("Items:", items);
 
   return (
     <Sidebar collapsible="icon" {...props}>
