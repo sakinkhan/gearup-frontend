@@ -172,20 +172,12 @@ export default function MobileNav({ user }: Props) {
                   asChild
                   className="justify-start px-4 py-2 mx-4"
                 >
-                  <Link href="/billing" onClick={closeDrawer}>
+                  <Link
+                    href="/dashboard/customer/billing"
+                    onClick={closeDrawer}
+                  >
                     <CreditCard className="mr-2 size-5" />
                     Billing
-                  </Link>
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  asChild
-                  className="justify-start px-4 py-2 mx-4"
-                >
-                  <Link href="/settings" onClick={closeDrawer}>
-                    <Settings className="mr-2 size-5" />
-                    Settings
                   </Link>
                 </Button>
 

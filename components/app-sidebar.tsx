@@ -1,19 +1,15 @@
 "use client";
 
 import * as React from "react";
-
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import Image from "next/image";
 import {
   LayoutDashboard,
   Package,
@@ -23,6 +19,10 @@ import {
   ClipboardList,
   Users,
 } from "lucide-react";
+import { CurrentUser } from "@/lib/auth/get-current-user";
+import Link from "next/link";
+import GearUpLogo from "./ui/gearup-logo";
+import Image from "next/image";
 
 const customerMenu = [
   {
@@ -92,23 +92,31 @@ const adminMenu = [
     icon: ClipboardList,
   },
 ];
-const items =
-  role === "ADMIN"
-    ? adminMenu
-    : role === "PROVIDER"
-      ? providerMenu
-      : customerMenu;
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  user: CurrentUser;
+}
+
+export function AppSidebar({ user, ...props }: AppSidebarProps) {
+  const items =
+    user.role === "ADMIN"
+      ? adminMenu
+      : user.role === "PROVIDER"
+        ? providerMenu
+        : customerMenu;
+
+  const { state } = useSidebar();
+
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="h-16 flex justify-center">
-        <Image
-          src="/Logo-transparent.png"
-          alt="GearUp"
-          width={130}
-          height={40}
-        />
+        <Link href="/">
+          {state === "collapsed" ? (
+            <Image src="/Logo-icon.png" alt="GearUp" width={28} height={28} />
+          ) : (
+            <GearUpLogo />
+          )}
+        </Link>
       </SidebarHeader>
 
       <SidebarContent>

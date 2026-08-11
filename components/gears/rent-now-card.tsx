@@ -23,6 +23,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Separator } from "@/components/ui/separator";
 import { toNumber } from "@/lib/api/gears";
 import type { Gear } from "@/types/gear";
+import { createCheckoutSession } from "@/lib/api/payment";
 
 export function RentNowCard({ gear }: { gear: Gear }) {
   const [range, setRange] = useState<DateRange | undefined>();
@@ -62,18 +63,22 @@ export function RentNowCard({ gear }: { gear: Gear }) {
 
   const handleRent = async () => {
     if (!range?.from || !range?.to) {
-      toast.error("Please select a Rental Date range");
+      toast.error("Please select a rental date range.");
       return;
     }
 
     setIsSubmitting(true);
+
     try {
-      const res = await fetch(
+      // 1. Create rental order
+      const rentalResponse = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/rentals`,
         {
           method: "POST",
           credentials: "include",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
             gearId: gear.id,
             rentalStartDate: range.from.toISOString(),
@@ -88,10 +93,36 @@ export function RentNowCard({ gear }: { gear: Gear }) {
           }),
         },
       );
-      if (!res.ok) throw new Error("Booking failed");
-      toast.success("Gear reserved! Redirecting to payment...");
-    } catch {
-      toast.error("Couldn't complete booking. Please try again.");
+
+      const rentalResult = await rentalResponse.json();
+
+      if (!rentalResponse.ok) {
+        throw new Error(rentalResult.message || "Booking failed");
+      }
+
+      const rentalOrderId = rentalResult.data.id;
+
+      // 2. Create Stripe Checkout Session
+      const paymentResult = await createCheckoutSession(rentalOrderId);
+
+      const paymentUrl = paymentResult.data.paymentUrl;
+
+      if (!paymentUrl) {
+        throw new Error("Payment URL not found.");
+      }
+
+      toast.success("Redirecting to secure payment...");
+
+      // 3. Redirect to Stripe
+      window.location.assign(paymentUrl);
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Couldn't complete booking. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }

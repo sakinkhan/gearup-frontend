@@ -6,8 +6,8 @@ import { fetchGears } from "@/lib/api/gears";
 
 export function useGearBrands() {
   const { data } = useQuery({
-    queryKey: ["gears", "facets"],
-    queryFn: () => fetchGears({}),
+    queryKey: ["gears", "all-brands-derived"],
+    queryFn: () => fetchGears({ limit: 1000 }),
     staleTime: 5 * 60 * 1000,
   });
 

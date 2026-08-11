@@ -23,7 +23,7 @@ async function handleResponse<T>(res: Response): Promise<T> {
 
   const payload = body?.data ?? body;
 
-  return (payload?.profile ?? payload) as T;
+  return (payload?.profile ?? payload?.updatedProfile ?? payload) as T;
 }
 
 export async function getCurrentUserClient(): Promise<User> {

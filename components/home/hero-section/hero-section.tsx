@@ -3,6 +3,8 @@ import { ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
 import { Gear } from "@/types/gear";
 import { Button } from "../../ui/button";
 import HeroSlideshow from "./hero-slideshow";
+import Link from "next/link";
+import { BecomeProviderButton } from "./hero-button";
 
 async function getGears(): Promise<Gear[]> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/gears`, {
@@ -43,17 +45,20 @@ export default async function HeroSection() {
 
         {/* Buttons */}
         <div className="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
-          <Button className="flex items-center justify-center gap-2 px-6 py-3 font-semibold">
-            Explore Gears
-            <ArrowRight className="size-5" />
-          </Button>
+          <Link href="/gears">
+            <Button className="flex items-center justify-center gap-2 px-6 py-3 font-semibold">
+              Explore Gears
+              <ArrowRight className="size-5" />
+            </Button>
+          </Link>
 
-          <Button
+          <BecomeProviderButton />
+          {/* <Button
             variant="outline"
             className="bg-accent px-6 py-3 font-semibold"
           >
             Become a Provider
-          </Button>
+          </Button> */}
         </div>
 
         {/* Stats */}

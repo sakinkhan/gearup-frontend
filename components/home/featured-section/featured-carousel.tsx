@@ -13,6 +13,16 @@ type FeaturedCarouselProps = {
 export default function FeaturedCarousel({ gears }: FeaturedCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  if (!gears || gears.length === 0) {
+    return null;
+  }
+
+  useEffect(() => {
+    if (activeIndex >= gears.length) {
+      setActiveIndex(0);
+    }
+  }, [gears.length, activeIndex]);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev === gears.length - 1 ? 0 : prev + 1));
@@ -34,7 +44,7 @@ export default function FeaturedCarousel({ gears }: FeaturedCarouselProps) {
         className="
           relative
           hidden
-          h-[520px]
+          h-130
           w-full
           max-w-3xl
           overflow-visible

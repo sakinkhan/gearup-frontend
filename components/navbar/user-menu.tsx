@@ -39,13 +39,8 @@ const menuGroups = [
     },
     {
       label: "Billing",
-      href: "/billing",
+      href: "/dashboard/customer/billing",
       icon: CreditCard,
-    },
-    {
-      label: "Settings",
-      href: "/settings",
-      icon: Settings,
     },
   ],
   [

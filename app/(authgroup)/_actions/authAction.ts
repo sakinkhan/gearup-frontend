@@ -99,22 +99,18 @@ export const loginAction = async (
   return result;
 };
 
-export const registerAction = async (
+export async function registerAction(
   prevState: AuthState | false,
   formData: FormData,
-): Promise<AuthState> => {
-  const name = formData.get("name");
-  const email = formData.get("email");
-  const password = formData.get("password");
-  const image = formData.get("image");
-  const role = formData.get("role");
-
+) {
   const payload = {
-    name,
-    email,
-    password,
-    image,
-    role,
+    name: formData.get("name"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    phone: formData.get("phone"),
+    address: formData.get("address"),
+    image: formData.get("image"),
+    role: formData.get("role"),
   };
 
   const res = await fetch(
@@ -122,20 +118,25 @@ export const registerAction = async (
     {
       method: "POST",
       headers: {
-        "content-type": "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     },
   );
 
-  const result = await res.json();
+  const data = await res.json();
 
-  if (result.success) {
-    await setSessionAndRedirect(
-      result.data.accessToken,
-      result.data.refreshToken,
-    );
+  if (!data.success) {
+    return {
+      success: false,
+      statusCode: data.statusCode,
+      message: data.message,
+    };
   }
 
-  return result;
-};
+  return {
+    success: true,
+    statusCode: 201,
+    message: "Registration successful",
+  };
+}

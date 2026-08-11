@@ -1,4 +1,5 @@
 "use client";
+
 import { Eye, EyeOff } from "lucide-react";
 import {
   CardAction,
@@ -23,33 +24,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+
+import { useRouter, useSearchParams } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AuthState, registerAction } from "../_actions/authAction";
 
 const RegisterForm = () => {
-  const [role, setRole] = useState("CUSTOMER");
+  const searchParams = useSearchParams();
+  const roleParam = searchParams.get("role");
+  const defaultRole = roleParam === "PROVIDER" ? "PROVIDER" : "CUSTOMER";
+
+  const [role, setRole] = useState(defaultRole);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const items = [
-    { label: "Admin", value: "ADMIN" },
-    { label: "Author", value: "AUTHOR" },
-    { label: "User", value: "USER" },
-  ];
+
   const [state, action, pending] = useActionState<AuthState | false, FormData>(
     registerAction,
     false,
   );
+
   const router = useRouter();
 
   useEffect(() => {
     if (!state) return;
+
     if (state.success) {
       toast.success(state.message || "Registration Successful");
-      router.push("/login");
-    }
-    if (!state.success) {
+      router.push("/auth/login");
+    } else {
       toast.error(state.message || "Registration Failed");
     }
   }, [state, router]);
@@ -62,22 +65,25 @@ const RegisterForm = () => {
             Sign Up for an account
           </CardTitle>
           <CardDescription className="text-center">
-            Enter your credentials below to create a new account
+            Enter your details below to create a new account
           </CardDescription>
         </CardHeader>
+
         <CardContent>
           <div className="flex flex-col gap-6">
+            {/* Name */}
             <div className="grid gap-2">
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
-                type="text"
                 name="name"
-                placeholder="Your Full Name"
+                type="text"
+                placeholder="Your full name"
                 required
               />
             </div>
 
+            {/* Email */}
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -89,6 +95,40 @@ const RegisterForm = () => {
               />
             </div>
 
+            {/* Phone */}
+            <div className="grid gap-2">
+              <Label htmlFor="phone">Phone</Label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="+61 400 000 000"
+              />
+            </div>
+
+            {/* Address */}
+            <div className="grid gap-2">
+              <Label htmlFor="address">Address</Label>
+              <Input
+                id="address"
+                name="address"
+                type="text"
+                placeholder="Your address"
+              />
+            </div>
+
+            {/* Image */}
+            <div className="grid gap-2">
+              <Label htmlFor="image">Profile Image URL</Label>
+              <Input
+                id="image"
+                name="image"
+                type="url"
+                placeholder="https://example.com/profile.jpg"
+              />
+            </div>
+
+            {/* Password */}
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
 
@@ -106,7 +146,6 @@ const RegisterForm = () => {
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute inset-y-0 right-3 flex items-center text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4" />
@@ -117,12 +156,13 @@ const RegisterForm = () => {
               </div>
             </div>
 
+            {/* Confirm Password */}
             <div className="grid gap-2">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
 
               <div className="relative">
                 <Input
-                  id="confirm-password"
+                  id="confirmPassword"
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Re-type your password"
@@ -134,9 +174,6 @@ const RegisterForm = () => {
                   type="button"
                   onClick={() => setShowConfirmPassword((prev) => !prev)}
                   className="absolute inset-y-0 right-3 flex items-center text-muted-foreground hover:text-foreground"
-                  aria-label={
-                    showConfirmPassword ? "Hide password" : "Show password"
-                  }
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="h-4 w-4" />
@@ -146,19 +183,20 @@ const RegisterForm = () => {
                 </button>
               </div>
             </div>
+
+            {/* Role */}
             <div className="grid gap-2">
               <Label htmlFor="role">Role</Label>
 
               <Select value={role} onValueChange={setRole}>
                 <SelectTrigger id="role" className="w-full">
-                  <SelectValue placeholder="Select a role" />
+                  <SelectValue placeholder="Select role" />
                 </SelectTrigger>
 
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem value="CUSTOMER">Customer</SelectItem>
                     <SelectItem value="PROVIDER">Provider</SelectItem>
-                    <SelectItem value="ADMIN">Admin</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -167,13 +205,16 @@ const RegisterForm = () => {
             </div>
           </div>
         </CardContent>
+
         <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full">
-            Sign Up
+          <Button type="submit" className="w-full" disabled={pending}>
+            {pending ? "Creating Account..." : "Sign Up"}
           </Button>
+
           <Marker variant="separator" className="mt-5">
             <MarkerContent>Already have an account?</MarkerContent>
           </Marker>
+
           <CardAction className="mx-auto">
             <Button variant="link">
               <Link href="/auth/login">Login</Link>

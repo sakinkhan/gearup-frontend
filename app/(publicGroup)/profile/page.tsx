@@ -10,6 +10,7 @@ import {
   UpdateProfileFormValues,
 } from "@/lib/validations/profile";
 import { Button } from "@/components/ui/button";
+import ProfileEditForm from "./_components/profile-edit-form";
 
 function getInitials(name?: string) {
   if (!name) return "?";
@@ -255,88 +256,15 @@ export default function ProfilePage() {
 
           {/* Edit mode */}
           {isEditing && (
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="mt-6 space-y-4 border-t border-border pt-6"
-              noValidate
-            >
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-foreground"
-                >
-                  Full name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  {...register("name")}
-                  className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
-                />
-                {errors.name && (
-                  <p className="mt-1 text-xs text-destructive">
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium text-foreground"
-                >
-                  Phone
-                </label>
-                <input
-                  id="phone"
-                  type="tel"
-                  {...register("phone")}
-                  className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
-                />
-                {errors.phone && (
-                  <p className="mt-1 text-xs text-destructive">
-                    {errors.phone.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor="address"
-                  className="block text-sm font-medium text-foreground"
-                >
-                  Address
-                </label>
-                <input
-                  id="address"
-                  type="text"
-                  {...register("address")}
-                  className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
-                />
-                {errors.address && (
-                  <p className="mt-1 text-xs text-destructive">
-                    {errors.address.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex items-center gap-3 pt-2">
-                <Button
-                  type="submit"
-                  disabled={!isDirty || updateProfile.isPending}
-                  className="bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {updateProfile.isPending ? "Saving..." : "Save changes"}
-                </Button>
-                <Button
-                  onClick={handleCancel}
-                  disabled={updateProfile.isPending}
-                  className="font-medium bg-accent text-foreground hover:bg-accent-foreground hover:text-accent"
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
+            <ProfileEditForm
+              register={register}
+              errors={errors}
+              handleSubmit={handleSubmit}
+              onSubmit={onSubmit}
+              onCancel={handleCancel}
+              isDirty={isDirty}
+              isPending={updateProfile.isPending}
+            />
           )}
         </div>
       </div>

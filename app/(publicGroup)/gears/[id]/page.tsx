@@ -48,7 +48,9 @@ export default async function GearDetailsPage({ params }: Props) {
             <div className="flex items-center gap-2">
               <Badge variant="outline">{gear.categoryName}</Badge>
               <Badge
-                className={isAvailable ? "bg-primary" : "bg-muted-foreground"}
+                className={
+                  isAvailable ? "bg-primary" : "bg-muted-foreground text-white"
+                }
               >
                 {isAvailable
                   ? "Available"
