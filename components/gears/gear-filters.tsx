@@ -218,7 +218,7 @@ export function GearFiltersSidebar({
       <div className="space-y-2">
         <Label>Status</Label>
         <Select
-          value={filters.status ?? "all"}
+          value={filters.status ?? "AVAILABLE"}
           onValueChange={(value) =>
             onChange({
               status:

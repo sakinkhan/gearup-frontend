@@ -108,3 +108,39 @@ export async function deleteProviderGear(id: string) {
 
   return result.data;
 }
+
+export interface CreateGearPayload {
+  categoryName: string;
+  name: string;
+  brand: string;
+  description: string;
+  rentalPricePerDay: number;
+  depositAmount: number;
+  stock: number;
+  availableStock: number;
+  condition: "NEW" | "GOOD" | "FAIR" | "USED";
+  status: "AVAILABLE" | "UNAVAILABLE" | "INACTIVE";
+  image: string;
+}
+
+export async function createProviderGear(payload: CreateGearPayload) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/provider/gear`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(payload),
+    },
+  );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(result.message || "Failed to create gear");
+  }
+
+  return result.data;
+}

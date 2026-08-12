@@ -12,9 +12,11 @@ import { ProviderGear } from "@/lib/api/provider-my-gears";
 import { useState } from "react";
 import { EditGearDialog } from "../_components/edit-gear-dialog";
 import { DeleteGearDialog } from "../_components/delete-gear-dialog";
+import { AddGearDialog } from "../_components/add-gear-dialog";
 
 const ProviderMyGearsPage = () => {
   const { data: gears = [], isLoading, isError, error } = useProviderMyGears();
+  const [addGearOpen, setAddGearOpen] = useState(false);
   const [editingGear, setEditingGear] = useState<ProviderGear | null>(null);
 
   const [deletingGear, setDeletingGear] = useState<ProviderGear | null>(null);
@@ -75,11 +77,9 @@ const ProviderMyGearsPage = () => {
           </p>
         </div>
 
-        <Button asChild>
-          <Link href="/provider/gears/create">
-            <Plus className="size-4" />
-            Add Gear
-          </Link>
+        <Button type="button" onClick={() => setAddGearOpen(true)}>
+          <Plus className="size-4" />
+          Add Gear
         </Button>
       </div>
 
@@ -111,6 +111,8 @@ const ProviderMyGearsPage = () => {
               onDelete={setDeletingGear}
             />
           ))}
+          <AddGearDialog open={addGearOpen} onOpenChange={setAddGearOpen} />
+
           <EditGearDialog
             gear={editingGear}
             open={editingGear !== null}

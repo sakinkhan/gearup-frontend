@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  CreateGearPayload,
+  createProviderGear,
   deleteProviderGear,
   fetchProviderMyGears,
   UpdateGearPayload,
@@ -13,6 +15,20 @@ export function useProviderMyGears() {
     queryKey: ["provider", "my-gears"],
     queryFn: fetchProviderMyGears,
     staleTime: 60 * 1000,
+  });
+}
+
+export function useCreateProviderGear() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: CreateGearPayload) => createProviderGear(payload),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["provider", "my-gears"],
+      });
+    },
   });
 }
 
