@@ -1,4 +1,4 @@
-import type { RentalOrder } from "@/types/rental";
+import type { ProviderRentalOrder } from "@/types/provider";
 
 interface ApiEnvelope<T> {
   success: boolean;
@@ -8,7 +8,7 @@ interface ApiEnvelope<T> {
 }
 
 export async function fetchProviderOrders(): Promise<
-  ApiEnvelope<RentalOrder[]>
+  ApiEnvelope<ProviderRentalOrder[]>
 > {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/provider/orders`,
@@ -17,7 +17,7 @@ export async function fetchProviderOrders(): Promise<
     },
   );
 
-  const body: ApiEnvelope<RentalOrder[]> = await res.json();
+  const body: ApiEnvelope<ProviderRentalOrder[]> = await res.json();
 
   if (!res.ok || !body.success) {
     throw new Error(body.message || "Failed to load provider orders");

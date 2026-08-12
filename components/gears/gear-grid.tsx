@@ -45,7 +45,6 @@ export function GearGrid({
     );
   }
 
-  // Only show error when request actually fails
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border py-24 text-center">
@@ -68,7 +67,6 @@ export function GearGrid({
     );
   }
 
-  // Empty API response is not an error
   if (gears.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border py-24 text-center">

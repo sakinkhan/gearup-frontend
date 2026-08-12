@@ -6,13 +6,7 @@ import { PackageCheck } from "lucide-react";
 import { useProviderOrders } from "@/hooks/use-provider-orders";
 import { ProviderRentalCard } from "../_components/provider-rental-card";
 
-const ACTIVE_STATUSES = [
-  "PENDING_PAYMENT",
-  "PAID",
-  "CONFIRMED",
-  "PICKED_UP",
-  "RETURNED",
-] as const;
+const ACTIVE_STATUSES = ["PAID", "CONFIRMED", "PICKED_UP", "RETURNED"] as const;
 
 export default function ProviderActiveRentalsPage() {
   const { data: orders = [], isLoading, isError, error } = useProviderOrders();
@@ -63,7 +57,6 @@ export default function ProviderActiveRentalsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold">Active Rentals</h1>
 
@@ -72,7 +65,6 @@ export default function ProviderActiveRentalsPage() {
         </p>
       </div>
 
-      {/* Count */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <PackageCheck className="size-4" />
 
@@ -82,7 +74,6 @@ export default function ProviderActiveRentalsPage() {
         </span>
       </div>
 
-      {/* Empty state */}
       {activeOrders.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center">
           <PackageCheck className="size-8 text-muted-foreground" />
@@ -95,7 +86,7 @@ export default function ProviderActiveRentalsPage() {
           </p>
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-1">
           {activeOrders.map((order) => (
             <ProviderRentalCard key={order.id} order={order} />
           ))}

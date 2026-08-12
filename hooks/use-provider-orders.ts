@@ -1,12 +1,13 @@
-"use client";
-
-import { useQuery } from "@tanstack/react-query";
+import type { ProviderRentalOrder } from "@/types/provider";
 import { fetchProviderOrders } from "@/lib/api/provider";
+import { useQuery } from "@tanstack/react-query";
 
 export function useProviderOrders() {
-  return useQuery({
+  return useQuery<ProviderRentalOrder[]>({
     queryKey: ["provider", "orders"],
-    queryFn: fetchProviderOrders,
-    select: (res) => res.data,
+    queryFn: async () => {
+      const response = await fetchProviderOrders();
+      return response.data;
+    },
   });
 }

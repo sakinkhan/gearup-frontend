@@ -19,11 +19,6 @@ export default async function GearDetailsPage({ params }: Props) {
   await requireAuth(`/gears/${id}`);
 
   let gear;
-  // try {
-  //   gear = await fetchGearById(id);
-  // } catch {
-  //   notFound();
-  // }
 
   try {
     gear = await fetchGearById(id);

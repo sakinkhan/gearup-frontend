@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RentalStatusBadge } from "@/components/badges/rental-status-badge";
-import type { RentalOrder } from "@/types/rental";
+import type { ProviderRentalOrder } from "@/types/provider";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-AU", {
@@ -18,7 +18,7 @@ function formatCurrency(amount: string) {
   }).format(Number(amount));
 }
 
-export function ProviderRentalCard({ order }: { order: RentalOrder }) {
+export function ProviderRentalCard({ order }: { order: ProviderRentalOrder }) {
   return (
     <div className="flex h-full flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
       {/* Header */}
@@ -38,7 +38,16 @@ export function ProviderRentalCard({ order }: { order: RentalOrder }) {
         <RentalStatusBadge status={order.status} />
       </div>
 
-      {/* Rental items */}
+      {/* Customer */}
+      <div className="border-b px-4 py-3">
+        <p className="text-xs text-muted-foreground">Customer</p>
+
+        <p className="mt-1 font-medium">{order.customer.name}</p>
+
+        <p className="text-sm text-muted-foreground">{order.customer.email}</p>
+      </div>
+
+      {/* Rental Items */}
       <div className="divide-y">
         {order.rentalItems.map((item) => (
           <div key={item.id} className="flex items-center gap-4 px-4 py-4">
