@@ -32,6 +32,7 @@ export interface RentalItem {
   quantity: number;
   pricePerDay: string;
   totalPrice: string;
+  hasReviewed: boolean;
   gearItem: RentalGearItem;
 }
 

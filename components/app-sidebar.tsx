@@ -49,7 +49,7 @@ const roleMenuItems: Record<Role, MenuItem[]> = {
   PROVIDER: [
     { title: "Dashboard", path: "", icon: LayoutDashboard },
     { title: "My Gear", path: "/gears", icon: Boxes },
-    { title: "Active Rentals", path: "/rentals", icon: ClipboardList },
+    { title: "Active Rentals", path: "/active-rentals", icon: ClipboardList },
     { title: "Pending Orders", path: "/pending-orders", icon: Package },
   ],
   ADMIN: [

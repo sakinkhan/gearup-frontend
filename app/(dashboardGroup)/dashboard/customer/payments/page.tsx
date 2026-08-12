@@ -1,4 +1,4 @@
-import { PaymentHistoryTable } from "@/app/(dashboardGroup)/_components/payment-history-table";
+import { PaymentHistoryTable } from "../_components/payment-history-table";
 
 export default function CustomerPaymentsPage() {
   return (

@@ -191,7 +191,7 @@ export default function PaymentSuccessPage() {
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <Link href="/gears">Keep browsing gear</Link>
+                <Link href="/gears">Keep browsing gears</Link>
               </Button>
             </motion.div>
           </motion.div>

@@ -1,4 +1,4 @@
-import { RentalHistoryList } from "@/app/(dashboardGroup)/_components/rental-history-list";
+import { RentalHistoryList } from "../_components/rental-history-list";
 
 export default function CustomerRentalsPage() {
   return (

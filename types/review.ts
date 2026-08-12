@@ -2,12 +2,15 @@ import { z } from "zod";
 
 export const createReviewSchema = z.object({
   gearItemId: z.string().uuid(),
+
   rentalOrderId: z.string().uuid(),
+
   rating: z
     .number({ invalid_type_error: "Please select a rating" })
     .int()
     .min(1, "Please select a rating")
     .max(5),
+
   comment: z
     .string()
     .min(5, "Comment must be at least 5 characters")
@@ -18,10 +21,24 @@ export type CreateReviewInput = z.infer<typeof createReviewSchema>;
 
 export interface Review {
   id: string;
+  customerId: string;
   gearItemId: string;
   rentalOrderId: string;
-  customerId: string;
   rating: number;
   comment: string;
   createdAt: string;
+  updatedAt: string;
+
+  gearItem: {
+    id: string;
+    name: string;
+    brand: string;
+    image: string;
+  };
+
+  rentalOrder: {
+    id: string;
+    rentalStartDate: string;
+    rentalEndDate: string;
+  };
 }

@@ -23,3 +23,23 @@ export async function fetchMyRentals(): Promise<ApiEnvelope<RentalOrder[]>> {
 
   return body;
 }
+
+export async function returnRentalOrder(
+  rentalOrderId: string,
+): Promise<ApiEnvelope<RentalOrder>> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/rentals/${rentalOrderId}/return`,
+    {
+      method: "PATCH",
+      credentials: "include",
+    },
+  );
+
+  const body: ApiEnvelope<RentalOrder> = await res.json();
+
+  if (!res.ok || !body.success) {
+    throw new Error(body.message || "Failed to return rental order");
+  }
+
+  return body;
+}

@@ -26,3 +26,20 @@ export async function createReview(input: CreateReviewInput): Promise<Review> {
 
   return body.data;
 }
+
+export async function fetchMyReviews(): Promise<ApiEnvelope<Review[]>> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/reviews/myReviews`,
+    {
+      credentials: "include",
+    },
+  );
+
+  const body: ApiEnvelope<Review[]> = await res.json();
+
+  if (!res.ok || !body.success) {
+    throw new Error(body.message || "Failed to load reviews");
+  }
+
+  return body;
+}
