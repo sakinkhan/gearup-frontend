@@ -10,6 +10,7 @@ import type { GearFilters } from "@/types/gear";
 const DEFAULT_FILTERS: GearFilters = {
   page: 1,
   limit: 8,
+  status: "AVAILABLE",
 };
 
 export function GearsExplorer() {
@@ -32,8 +33,8 @@ export function GearsExplorer() {
       <GearFiltersSidebar
         filters={filters}
         onChange={(next) =>
-          setFilters((prev) => ({
-            ...prev,
+          setFilters((current) => ({
+            ...current,
             ...next,
             page: 1,
           }))

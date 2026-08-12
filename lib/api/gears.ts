@@ -59,9 +59,7 @@ export async function fetchGears(
 
   if (!res.ok) {
     const errorBody = await res.text();
-
     console.error("FETCH GEARS FAILED:", res.status, errorBody);
-
     throw new Error(`Failed to fetch gears (${res.status})`);
   }
 

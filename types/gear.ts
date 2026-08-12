@@ -1,13 +1,22 @@
 export type GearStatus = "AVAILABLE" | "UNAVAILABLE" | "INACTIVE";
-export type GearCondition = "NEW" | "USED";
+
+export type GearCondition = "NEW" | "GOOD" | "FAIR" | "USED";
+
 export type UserRole = "CUSTOMER" | "PROVIDER" | "ADMIN";
 
 export interface Review {
   id: string;
+  customerId: string;
+  gearItemId: string;
+  rentalOrderId: string;
   rating: number;
   comment?: string;
-  userId?: string;
-  createdAt?: string;
+  createdAt: string;
+  customer?: {
+    id: string;
+    name: string;
+    image?: string | null;
+  };
 }
 
 export interface GearProvider {
@@ -36,30 +45,17 @@ export type Gear = {
   stock: number;
   availableStock: number;
 
-  condition: "NEW" | "GOOD" | "FAIR" | "USED";
-  status: "AVAILABLE" | "UNAVAILABLE" | "INACTIVE";
+  condition: GearCondition;
+  status: GearStatus;
 
   image: string;
 
   createdAt: string;
   updatedAt: string;
 
-  provider: {
-    id: string;
-    name: string;
-    email: string;
-    phone?: string | null;
-    address?: string | null;
-    image?: string | null;
-    role: "CUSTOMER" | "PROVIDER" | "ADMIN";
-    status: string;
-  };
+  provider: GearProvider;
 
-  reviews: {
-    id?: string;
-    rating: number;
-    comment?: string;
-  }[];
+  reviews: Review[];
 };
 
 export interface GearFilters {

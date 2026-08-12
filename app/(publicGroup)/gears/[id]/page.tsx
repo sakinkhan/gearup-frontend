@@ -6,6 +6,7 @@ import { RentNowCard } from "@/components/gears/rent-now-card";
 import { ProviderInfo } from "@/components/gears/provider-info";
 import { requireAuth } from "@/lib/validations/require-auth";
 import { fetchGearById } from "@/lib/api/server/gears";
+import { GearReviews } from "@/components/gears/gear-reviews";
 
 type Props = {
   params: Promise<{
@@ -61,6 +62,7 @@ export default async function GearDetailsPage({ params }: Props) {
 
           <GearSpecs gear={gear} />
           <ProviderInfo provider={gear.provider} />
+          <GearReviews reviews={gear.reviews} />
         </div>
 
         <div className="lg:sticky lg:top-20 lg:h-fit">
