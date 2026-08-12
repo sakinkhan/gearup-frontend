@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Avatar } from "@/components/ui/avatar"; 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ReviewDialog } from "./review-dialog";
 import type { RentalOrder } from "@/types/rental";
 import { RentalStatusBadge } from "@/components/badges/rental-status-badge";
@@ -22,6 +22,7 @@ function formatCurrency(amount: string) {
 }
 
 export function RentalOrderCard({ order }: { order: RentalOrder }) {
+  console.log(order);
   const canReview = REVIEWABLE_STATUSES.includes(order.status);
 
   return (
@@ -46,12 +47,10 @@ export function RentalOrderCard({ order }: { order: RentalOrder }) {
             key={item.id}
             className="flex flex-wrap items-center gap-4 px-4 py-3"
           >
-            <Avatar
-              src={item.gearItem.image}
-              alt={item.gearItem.name}
-              sizePx={56}
-              className="rounded-md"
-            />
+            <Avatar className="h-14 w-14 rounded-md">
+              <AvatarImage src={item.gearItem.image} alt={item.gearItem.name} />
+              <AvatarFallback>{item.gearItem.name.charAt(0)}</AvatarFallback>
+            </Avatar>
 
             <div className="min-w-0 flex-1">
               <Link

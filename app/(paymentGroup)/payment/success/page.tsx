@@ -8,12 +8,36 @@ import { Check, Copy, PackageCheck } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { confirmPayment } from "@/lib/api/payments";
 
 export default function PaymentSuccessPage() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId") ?? "";
+  const sessionId = searchParams.get("session_id") ?? "";
+  const [paymentStatus, setPaymentStatus] = useState<
+    "confirming" | "paid" | "failed"
+  >("confirming");
   const shouldReduceMotion = useReducedMotion();
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!sessionId) {
+      setPaymentStatus("failed");
+      return;
+    }
+
+    const confirm = async () => {
+      try {
+        await confirmPayment(sessionId);
+        setPaymentStatus("paid");
+      } catch (error) {
+        console.error("Payment confirmation failed:", error);
+        setPaymentStatus("failed");
+      }
+    };
+
+    confirm();
+  }, [sessionId]);
 
   useEffect(() => {
     if (!copied) return;
@@ -161,7 +185,7 @@ export default function PaymentSuccessPage() {
 
             <motion.div variants={rise} className="flex flex-col gap-2 pt-2">
               <Button asChild className="w-full">
-                <Link href="/dashboard/orders">
+                <Link href="/dashboard/customer/rentals">
                   <PackageCheck className="mr-2 size-4" />
                   View your orders
                 </Link>

@@ -8,12 +8,15 @@ interface ApiEnvelope<T> {
 }
 
 export async function createReview(input: CreateReviewInput): Promise<Review> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews`, {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(input),
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/reviews`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    },
+  );
 
   const body: ApiEnvelope<Review> = await res.json();
 

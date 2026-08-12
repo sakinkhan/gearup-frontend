@@ -1,10 +1,11 @@
 export type RentalOrderStatus =
   | "PENDING_PAYMENT"
+  | "PAID"
   | "CONFIRMED"
-  | "ACTIVE"
+  | "PICKED_UP"
   | "RETURNED"
-  | "CANCELLED"
-  | "COMPLETED";
+  | "COMPLETED"
+  | "CANCELLED";
 
 export interface RentalGearItem {
   id: string;

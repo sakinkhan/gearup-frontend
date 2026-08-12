@@ -53,12 +53,6 @@ export default async function HeroSection() {
           </Link>
 
           <BecomeProviderButton />
-          {/* <Button
-            variant="outline"
-            className="bg-accent px-6 py-3 font-semibold"
-          >
-            Become a Provider
-          </Button> */}
         </div>
 
         {/* Stats */}

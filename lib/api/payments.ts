@@ -8,14 +8,43 @@ interface ApiEnvelope<T> {
 }
 
 export async function fetchMyPayments(): Promise<ApiEnvelope<Payment[]>> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payments`, {
-    credentials: "include",
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments`,
+    {
+      credentials: "include",
+    },
+  );
 
   const body: ApiEnvelope<Payment[]> = await res.json();
 
   if (!res.ok || !body.success) {
     throw new Error(body.message || "Failed to load payment history");
+  }
+
+  return body;
+}
+
+export async function confirmPayment(
+  transactionId: string,
+): Promise<ApiEnvelope<Payment>> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/confirm`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        transactionId,
+      }),
+    },
+  );
+
+  const body: ApiEnvelope<Payment> = await res.json();
+
+  if (!res.ok || !body.success) {
+    throw new Error(body.message || "Failed to confirm payment");
   }
 
   return body;

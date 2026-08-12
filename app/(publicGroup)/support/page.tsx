@@ -61,12 +61,15 @@ const faqs = [
 async function submitSupportRequest(
   values: SupportFormValues,
 ): Promise<ApiEnvelope<null>> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/support`, {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(values),
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/support`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    },
+  );
 
   const body: ApiEnvelope<null> = await res.json();
 

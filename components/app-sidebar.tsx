@@ -76,7 +76,6 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const items = buildMenu(user.role);
   const { state } = useSidebar();
-  console.log("Items:", items);
 
   return (
     <Sidebar collapsible="icon" {...props}>

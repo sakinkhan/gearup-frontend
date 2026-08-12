@@ -20,8 +20,6 @@ export default function DesktopNav({ user }: Props) {
   const pathname = usePathname();
   const DashboardIcon = dashboardLink.icon;
 
-  console.log("USER:", user);
-
   const dashboardHref = user ? dashboardRouteByRole[user.role] : "";
 
   return (

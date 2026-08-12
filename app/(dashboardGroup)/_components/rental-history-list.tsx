@@ -39,7 +39,7 @@ export function RentalHistoryList() {
   if (isError) {
     return (
       <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-        Couldn&apos;t load your rental history. Please try again shortly.
+        Couldn't load your rental history. Please try again shortly.
       </div>
     );
   }
@@ -47,13 +47,13 @@ export function RentalHistoryList() {
   if (!orders || orders.length === 0) {
     return (
       <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-        You haven&apos;t rented any gear yet.
+        You haven't rented any gear yet.
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 grid grid-cols-4 gap-4">
       {orders.map((order) => (
         <RentalOrderCard key={order.id} order={order} />
       ))}

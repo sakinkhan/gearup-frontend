@@ -8,9 +8,12 @@ interface ApiEnvelope<T> {
 }
 
 export async function fetchMyRentals(): Promise<ApiEnvelope<RentalOrder[]>> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rentals`, {
-    credentials: "include",
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/rentals`,
+    {
+      credentials: "include",
+    },
+  );
 
   const body: ApiEnvelope<RentalOrder[]> = await res.json();
 
