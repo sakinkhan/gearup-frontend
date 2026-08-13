@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import type { RentalOrder } from "@/types/rental";
 import { fetchAllRentalOrders } from "@/lib/api/admin";
 import { RentalTable } from "../_components/rental-table";
+import GlobalLoading from "@/app/loading";
 
 export default function AdminRentalManagementPage() {
   const [orders, setOrders] = useState<RentalOrder[]>([]);
@@ -35,21 +36,7 @@ export default function AdminRentalManagementPage() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            Rental Management
-          </h1>
-
-          <p className="text-muted-foreground">
-            Monitor all rental orders across GearUp.
-          </p>
-        </div>
-
-        <div className="text-muted-foreground">Loading rental orders...</div>
-      </div>
-    );
+    return <GlobalLoading />;
   }
 
   if (error) {

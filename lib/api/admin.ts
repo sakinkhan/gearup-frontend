@@ -1,3 +1,4 @@
+import { AdminDashboardStats } from "@/types/admin";
 import { Gear } from "@/types/gear";
 import { RentalOrder } from "@/types/rental";
 import type { User, UserStatus } from "@/types/user";
@@ -108,6 +109,23 @@ export async function fetchAllRentalOrders(): Promise<RentalOrder[]> {
 
   if (!res.ok || !body.success) {
     throw new Error(body.message || "Failed to load rental orders");
+  }
+
+  return body.data;
+}
+
+export async function fetchAdminDashboardStats(): Promise<AdminDashboardStats> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/admin/dashboard/stats`,
+    {
+      credentials: "include",
+    },
+  );
+
+  const body = await res.json();
+
+  if (!res.ok || !body.success) {
+    throw new Error(body.message || "Failed to load dashboard statistics");
   }
 
   return body.data;

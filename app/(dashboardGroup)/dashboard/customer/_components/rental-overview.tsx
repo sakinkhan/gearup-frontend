@@ -2,6 +2,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -25,10 +26,12 @@ export function RentalOverview({
     {
       status: "In Progress",
       count: inProgress,
+      fill: "#f59e0b",
     },
     {
       status: "Completed",
       count: completed,
+      fill: "#22c55e",
     },
   ];
 
@@ -65,12 +68,11 @@ export function RentalOverview({
               <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
 
               <Tooltip />
-
-              <Bar
-                dataKey="count"
-                fill="var(--primary)"
-                radius={[6, 6, 0, 0]}
-              />
+              <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                {data.map((entry) => (
+                  <Cell key={entry.status} fill={entry.fill} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>

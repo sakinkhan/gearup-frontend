@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import type { Gear } from "@/types/gear";
 import { fetchAllGearListings } from "@/lib/api/admin";
 import { GearTable } from "../_components/gear-table";
+import GlobalLoading from "@/app/loading";
 
 export default function AdminGearManagementPage() {
   const [gears, setGears] = useState<Gear[]>([]);
@@ -34,19 +35,7 @@ export default function AdminGearManagementPage() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Gear Management</h1>
-
-          <p className="text-muted-foreground">
-            Manage and monitor all gear listings across GearUp.
-          </p>
-        </div>
-
-        <div className="text-muted-foreground">Loading gear listings...</div>
-      </div>
-    );
+    return <GlobalLoading />;
   }
 
   if (error) {

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { User } from "@/types/user";
 import { fetchAllUsers } from "@/lib/api/admin";
 import { UsersTable } from "../_components/users-table";
+import GlobalLoading from "@/app/loading";
 
 export default function AdminUserManagementPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -31,19 +32,7 @@ export default function AdminUserManagementPage() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">User Management</h1>
-
-          <p className="text-muted-foreground">
-            Manage registered GearUp users and account status.
-          </p>
-        </div>
-
-        <div className="text-muted-foreground">Loading users...</div>
-      </div>
-    );
+    return <GlobalLoading />;
   }
 
   if (error) {
