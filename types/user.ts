@@ -21,3 +21,14 @@ export interface UpdateUserPayload {
   address?: string;
   image?: string;
 }
+
+export type CurrentUser = {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  address?: string | null;
+  image?: string | null;
+  role: "CUSTOMER" | "PROVIDER" | "ADMIN";
+  status: string;
+};

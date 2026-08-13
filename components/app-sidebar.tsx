@@ -20,10 +20,10 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
-import { CurrentUser } from "@/lib/auth/get-current-user";
 import Link from "next/link";
 import GearUpLogo from "./ui/gearup-logo";
 import Image from "next/image";
+import { CurrentUser } from "@/types/user";
 
 type MenuItem = {
   title: string;

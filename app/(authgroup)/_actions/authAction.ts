@@ -21,12 +21,6 @@ type TokenPayload = {
   role: "CUSTOMER" | "PROVIDER" | "ADMIN";
 };
 
-const API_BASE = process.env.BACKEND_API_URL;
-
-if (!API_BASE) {
-  throw new Error("BACKEND_API_URL is not configured");
-}
-
 // Shared: sets cookies + redirects based on user role
 const setSessionAndRedirect = async (
   accessToken: string,
@@ -78,6 +72,11 @@ export const loginAction = async (
   prevState: AuthState | false,
   formData: FormData,
 ): Promise<AuthState> => {
+  const API_BASE = process.env.BACKEND_API_URL;
+
+  if (!API_BASE) {
+    throw new Error("BACKEND_API_URL is not configured");
+  }
   const email = formData.get("email");
   const password = formData.get("password");
 
@@ -119,6 +118,11 @@ export async function registerAction(
     image: formData.get("image"),
     role: formData.get("role"),
   };
+  const API_BASE = process.env.BACKEND_API_URL;
+
+  if (!API_BASE) {
+    throw new Error("BACKEND_API_URL is not configured");
+  }
 
   const res = await fetch(`${API_BASE}/users/register`, {
     method: "POST",

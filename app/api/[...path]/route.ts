@@ -2,13 +2,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-const BACKEND_URL = process.env.BACKEND_API_URL;
-
-if (!BACKEND_URL) {
-  throw new Error("BACKEND_API_URL is not configured");
-}
-
 async function proxy(req: NextRequest, path: string[]) {
+  const BACKEND_URL = process.env.BACKEND_API_URL;
+
+  if (!BACKEND_URL) {
+    throw new Error("BACKEND_API_URL is not configured");
+  }
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
 

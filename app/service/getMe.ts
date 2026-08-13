@@ -2,21 +2,15 @@
 
 import { cookies } from "next/headers";
 
-const API_BASE = process.env.BACKEND_API_URL;
-
-if (!API_BASE) {
-  throw new Error("BACKEND_API_URL is not configured");
-}
-
 type GetMeResult =
   | { success: true; data: any }
   | { success: false; message: string };
 
 export const getMe = async (): Promise<GetMeResult> => {
+  const API_BASE = process.env.BACKEND_API_URL;
+
   if (!API_BASE) {
-    throw new Error(
-      "API_BASE is not set. Check .env.local exists in the project root and restart the dev server.",
-    );
+    throw new Error("BACKEND_API_URL is not configured");
   }
 
   const cookieStore = await cookies();

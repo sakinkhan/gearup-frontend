@@ -11,22 +11,23 @@ export type CurrentUser = {
   status: string;
 };
 
-const API_BASE = process.env.BACKEND_API_URL;
-
-if (!API_BASE) {
-  throw new Error("BACKEND_API_URL is not configured");
-}
-
 export async function getCurrentUser(): Promise<CurrentUser | null> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("accessToken")?.value;
+  const API_URL = process.env.BACKEND_API_URL;
 
-  if (!token) {
+  if (!API_URL) {
+    console.error("BACKEND_API_URL is not configured");
     return null;
   }
 
   try {
-    const res = await fetch(`${API_BASE}/users/me`, {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("accessToken")?.value;
+
+    if (!token) {
+      return null;
+    }
+
+    const res = await fetch(`${API_URL}/users/me`, {
       headers: {
         Cookie: `accessToken=${token}`,
       },
@@ -34,13 +35,10 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     });
 
     if (!res.ok) {
-      console.error("GET CURRENT USER FAILED:", res.status);
       return null;
     }
 
     const data = await res.json();
-
-    console.log("CURRENT USER:", data.data.profile);
 
     return data.data.profile as CurrentUser;
   } catch (error) {

@@ -78,24 +78,75 @@ const ProviderDashboardPage = () => {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            Provider Dashboard
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Overview of your gear and rental activity.
-          </p>
+        {/* Header */}
+        <div className="space-y-2">
+          <div className="h-8 w-56 animate-pulse rounded-md bg-muted" />
+          <div className="h-4 w-80 animate-pulse rounded-md bg-muted" />
         </div>
 
+        {/* Stats */}
         <div className="grid gap-4 md:grid-cols-3">
           {[1, 2, 3].map((item) => (
             <Card key={item}>
-              <CardContent className="p-6">
-                <div className="h-20 animate-pulse rounded-md bg-muted" />
+              <CardContent className="flex items-center gap-4 p-6">
+                <div className="size-11 animate-pulse rounded-lg bg-muted" />
+
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 w-24 animate-pulse rounded bg-muted" />
+                  <div className="h-7 w-12 animate-pulse rounded bg-muted" />
+                  <div className="h-3 w-32 animate-pulse rounded bg-muted" />
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
+
+        {/* Charts */}
+        <div className="grid gap-6 lg:grid-cols-2">
+          {[1, 2].map((item) => (
+            <Card key={item}>
+              <CardHeader>
+                <div className="h-6 w-40 animate-pulse rounded bg-muted" />
+              </CardHeader>
+
+              <CardContent>
+                <div className="h-[280px] animate-pulse rounded-md bg-muted" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Inventory Chart */}
+        <Card>
+          <CardHeader>
+            <div className="h-6 w-48 animate-pulse rounded bg-muted" />
+          </CardHeader>
+
+          <CardContent>
+            <div className="h-[320px] animate-pulse rounded-md bg-muted" />
+          </CardContent>
+        </Card>
+
+        {/* Inventory Overview */}
+        <Card>
+          <CardHeader>
+            <div className="h-6 w-44 animate-pulse rounded bg-muted" />
+          </CardHeader>
+
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <div className="h-4 w-28 animate-pulse rounded bg-muted" />
+                <div className="h-8 w-16 animate-pulse rounded bg-muted" />
+              </div>
+
+              <div className="space-y-2 text-right">
+                <div className="ml-auto h-4 w-24 animate-pulse rounded bg-muted" />
+                <div className="ml-auto h-8 w-16 animate-pulse rounded bg-muted" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }

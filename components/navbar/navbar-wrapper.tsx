@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/app/utils/getCurrentUser";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { Navbar } from "../navbar/navbar";
 
 export async function NavbarWrapper() {

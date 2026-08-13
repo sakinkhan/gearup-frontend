@@ -1,11 +1,5 @@
 import { cookies } from "next/headers";
 
-const API_BASE = process.env.BACKEND_API_URL;
-
-if (!API_BASE) {
-  throw new Error("BACKEND_API_URL is not configured");
-}
-
 export type CurrentUser = {
   id: string;
   name: string;
@@ -18,6 +12,12 @@ export type CurrentUser = {
 };
 
 export async function getCurrentUser(): Promise<CurrentUser | null> {
+  const API_BASE = process.env.BACKEND_API_URL;
+
+  if (!API_BASE) {
+    throw new Error("BACKEND_API_URL is not configured");
+  }
+
   const cookieStore = await cookies();
   const token = cookieStore.get("accessToken")?.value;
 

@@ -1,13 +1,13 @@
 import { cookies } from "next/headers";
 import type { Gear } from "@/types/gear";
 
-const API_URL = process.env.BACKEND_API_URL;
-
-if (!API_URL) {
-  throw new Error("BACKEND_API_URL is not configured");
-}
-
 export async function fetchGearById(id: string): Promise<Gear> {
+  const API_URL = process.env.BACKEND_API_URL;
+
+  if (!API_URL) {
+    throw new Error("BACKEND_API_URL is not configured");
+  }
+
   const cookieStore = await cookies();
 
   const res = await fetch(`${API_URL}/gears/${id}`, {
@@ -21,7 +21,6 @@ export async function fetchGearById(id: string): Promise<Gear> {
 
   if (!res.ok) {
     console.error("FETCH GEAR BY ID FAILED:", res.status, result);
-
     throw new Error(result?.message || "Failed to fetch gear");
   }
 

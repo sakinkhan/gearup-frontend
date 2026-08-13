@@ -3,11 +3,7 @@ import { Gear } from "@/types/gear";
 import { RentalOrder } from "@/types/rental";
 import type { User, UserStatus } from "@/types/user";
 
-const API_BASE = process.env.BACKEND_API_URL;
-
-if (!API_BASE) {
-  throw new Error("BACKEND_API_URL is not configured");
-}
+const API_BASE = "/api";
 
 interface ApiEnvelope<T> {
   success: boolean;
@@ -119,11 +115,15 @@ export async function fetchAllRentalOrders(): Promise<RentalOrder[]> {
 
 export async function fetchAdminDashboardStats(): Promise<AdminDashboardStats> {
   const res = await fetch(`${API_BASE}/admin/dashboard/stats`, {
+    method: "GET",
     credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
     cache: "no-store",
   });
 
-  const body = await res.json();
+  const body: ApiEnvelope<AdminDashboardStats> = await res.json();
 
   if (!res.ok || !body.success) {
     throw new Error(body.message || "Failed to load dashboard statistics");
