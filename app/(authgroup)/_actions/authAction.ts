@@ -37,7 +37,7 @@ const setSessionAndRedirect = async (
   cookieStore.set("accessToken", accessToken, {
     httpOnly: true,
     secure: true,
-    sameSite: "none",
+    sameSite: "lax",
     path: "/",
     maxAge: 60 * 60 * 24,
   });
@@ -45,7 +45,7 @@ const setSessionAndRedirect = async (
   cookieStore.set("refreshToken", refreshToken, {
     httpOnly: true,
     secure: true,
-    sameSite: "none",
+    sameSite: "lax",
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
   });
