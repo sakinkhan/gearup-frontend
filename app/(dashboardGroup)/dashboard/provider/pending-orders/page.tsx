@@ -11,7 +11,7 @@ import {
   useProviderOrders,
   useUpdateProviderOrderStatus,
 } from "@/hooks/use-provider-orders";
-import { RentalStatus } from "@/lib/api/provider-orders";
+import { RentalStatus } from "@/types/provider";
 
 function getOrderAction(status: RentalStatus) {
   switch (status) {

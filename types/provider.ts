@@ -1,27 +1,16 @@
-import type { RentalOrderStatus } from "@/types/rental";
+export type RentalStatus =
+  | "PENDING_PAYMENT"
+  | "PAID"
+  | "CONFIRMED"
+  | "PICKED_UP"
+  | "RETURNED"
+  | "COMPLETED"
+  | "CANCELLED";
 
 export interface ProviderCustomer {
   id: string;
   name: string;
   email: string;
-}
-
-export interface ProviderGearItem {
-  id: string;
-  providerId: string;
-  categoryName: string;
-  name: string;
-  brand: string;
-  description: string;
-  rentalPricePerDay: string;
-  depositAmount: string;
-  stock: number;
-  availableStock: number;
-  condition: string;
-  status: "AVAILABLE" | "UNAVAILABLE" | "INACTIVE";
-  image: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface ProviderRentalItem {
@@ -31,21 +20,37 @@ export interface ProviderRentalItem {
   quantity: number;
   pricePerDay: string;
   totalPrice: string;
-  gearItem: ProviderGearItem;
+
+  gearItem: {
+    id: string;
+    name: string;
+    image: string;
+    brand: string;
+    categoryName: string;
+  };
 }
 
 export interface ProviderRentalOrder {
   id: string;
   customerId: string;
-  totalAmount: string;
+  status: RentalStatus;
+
   rentalStartDate: string;
   rentalEndDate: string;
+
+  totalAmount: string;
   totalDays: number;
-  status: RentalOrderStatus;
-  notes: string | null;
+
+  notes: string;
+
   createdAt: string;
   updatedAt: string;
 
   customer: ProviderCustomer;
+
   rentalItems: ProviderRentalItem[];
+}
+
+export interface UpdateOrderStatusPayload {
+  status: RentalStatus;
 }

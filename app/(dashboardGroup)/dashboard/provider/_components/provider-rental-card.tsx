@@ -17,8 +17,11 @@ function formatCurrency(amount: string) {
     currency: "AUD",
   }).format(Number(amount));
 }
+type ProviderRentalCardProps = {
+  order: ProviderRentalOrder;
+};
 
-export function ProviderRentalCard({ order }: { order: ProviderRentalOrder }) {
+export function ProviderRentalCard({ order }: ProviderRentalCardProps) {
   return (
     <div className="flex h-full flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
       {/* Header */}

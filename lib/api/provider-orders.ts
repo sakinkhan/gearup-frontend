@@ -1,51 +1,6 @@
-export type RentalStatus =
-  | "PENDING_PAYMENT"
-  | "PAID"
-  | "CONFIRMED"
-  | "PICKED_UP"
-  | "RETURNED"
-  | "COMPLETED"
-  | "CANCELLED";
+import type { ProviderRentalOrder, RentalStatus } from "@/types/provider";
 
-export interface ProviderOrder {
-  id: string;
-  customerId: string;
-  status: RentalStatus;
-
-  rentalStartDate: string;
-  rentalEndDate: string;
-
-  totalAmount: string;
-  totalDays: number;
-
-  notes: string;
-
-  createdAt: string;
-  updatedAt: string;
-
-  customer?: {
-    id: string;
-    name: string;
-    email: string;
-  };
-
-  rentalItems: {
-    id: string;
-    quantity: number;
-
-    gearItem: {
-      id: string;
-      name: string;
-      image: string;
-    };
-  }[];
-}
-
-export interface UpdateOrderStatusPayload {
-  status: RentalStatus;
-}
-
-export async function fetchProviderOrders(): Promise<ProviderOrder[]> {
+export async function fetchProviderOrders(): Promise<ProviderRentalOrder[]> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/provider/orders`,
     {
@@ -67,7 +22,7 @@ export async function fetchProviderOrders(): Promise<ProviderOrder[]> {
 export async function updateProviderOrderStatus(
   orderId: string,
   status: RentalStatus,
-) {
+): Promise<ProviderRentalOrder> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/provider/orders/${orderId}`,
     {
