@@ -22,13 +22,12 @@ type Payment = {
   createdAt: string;
 };
 
+const API_BASE = "/api";
+
 async function fetchPayments(): Promise<Payment[]> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/payments/me`,
-    {
-      credentials: "include",
-    },
-  );
+  const res = await fetch(`${API_BASE}/payments/me`, {
+    credentials: "include",
+  });
   if (!res.ok) throw new Error("Failed to load payments");
   const body = await res.json();
   return body.data;

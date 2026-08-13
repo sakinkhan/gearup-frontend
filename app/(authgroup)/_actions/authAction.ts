@@ -21,6 +21,12 @@ type TokenPayload = {
   role: "CUSTOMER" | "PROVIDER" | "ADMIN";
 };
 
+const API_BASE = process.env.BACKEND_API_URL;
+
+if (!API_BASE) {
+  throw new Error("BACKEND_API_URL is not configured");
+}
+
 // Shared: sets cookies + redirects based on user role
 const setSessionAndRedirect = async (
   accessToken: string,
@@ -30,14 +36,18 @@ const setSessionAndRedirect = async (
 
   cookieStore.set("accessToken", accessToken, {
     httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
     maxAge: 60 * 60 * 24,
-    sameSite: "lax",
   });
 
   cookieStore.set("refreshToken", refreshToken, {
     httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
     maxAge: 60 * 60 * 24 * 7,
-    sameSite: "lax",
   });
 
   let decodedToken: TokenPayload;
@@ -76,16 +86,13 @@ export const loginAction = async (
     password,
   };
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/login`,
-    {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(payload),
+  const res = await fetch(`${API_BASE}/auth/login`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
     },
-  );
+    body: JSON.stringify(payload),
+  });
 
   const result = await res.json();
 
@@ -113,16 +120,13 @@ export async function registerAction(
     role: formData.get("role"),
   };
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/users/register`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+  const res = await fetch(`${API_BASE}/users/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify(payload),
+  });
 
   const data = await res.json();
 

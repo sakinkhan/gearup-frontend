@@ -2,16 +2,20 @@
 
 import { cookies } from "next/headers";
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+const API_BASE = process.env.BACKEND_API_URL;
+
+if (!API_BASE) {
+  throw new Error("BACKEND_API_URL is not configured");
+}
 
 type GetMeResult =
   | { success: true; data: any }
   | { success: false; message: string };
 
 export const getMe = async (): Promise<GetMeResult> => {
-  if (!API_URL) {
+  if (!API_BASE) {
     throw new Error(
-      "NEXT_PUBLIC_BACKEND_API_URL is not set. Check .env.local exists in the project root and restart the dev server.",
+      "API_BASE is not set. Check .env.local exists in the project root and restart the dev server.",
     );
   }
 
@@ -26,7 +30,7 @@ export const getMe = async (): Promise<GetMeResult> => {
   }
 
   try {
-    const res = await fetch(`${API_URL}/users/me`, {
+    const res = await fetch(`${API_BASE}/users/me`, {
       headers: {
         Cookie: `accessToken=${accessToken.value}`,
       },

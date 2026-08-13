@@ -30,6 +30,8 @@ const supportSchema = z.object({
   message: z.string().min(10, "Please provide a bit more detail"),
 });
 
+const API_BASE = "/api";
+
 type SupportFormValues = z.infer<typeof supportSchema>;
 
 type ApiEnvelope<T> = {
@@ -61,15 +63,12 @@ const faqs = [
 async function submitSupportRequest(
   values: SupportFormValues,
 ): Promise<ApiEnvelope<null>> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/support`,
-    {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    },
-  );
+  const res = await fetch(`${API_BASE}/support`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(values),
+  });
 
   const body: ApiEnvelope<null> = await res.json();
 

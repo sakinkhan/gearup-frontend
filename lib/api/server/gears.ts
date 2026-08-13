@@ -1,8 +1,11 @@
 import { cookies } from "next/headers";
 import type { Gear } from "@/types/gear";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_BACKEND_API_URL || "http://localhost:5000/api";
+const API_URL = process.env.BACKEND_API_URL;
+
+if (!API_URL) {
+  throw new Error("BACKEND_API_URL is not configured");
+}
 
 export async function fetchGearById(id: string): Promise<Gear> {
   const cookieStore = await cookies();

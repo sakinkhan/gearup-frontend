@@ -7,13 +7,12 @@ interface ApiEnvelope<T> {
   data: T;
 }
 
+const API_BASE = "/api";
+
 export async function fetchMyRentals(): Promise<ApiEnvelope<RentalOrder[]>> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/rentals`,
-    {
-      credentials: "include",
-    },
-  );
+  const res = await fetch(`${API_BASE}/rentals`, {
+    credentials: "include",
+  });
 
   const body: ApiEnvelope<RentalOrder[]> = await res.json();
 
@@ -27,13 +26,10 @@ export async function fetchMyRentals(): Promise<ApiEnvelope<RentalOrder[]>> {
 export async function returnRentalOrder(
   rentalOrderId: string,
 ): Promise<ApiEnvelope<RentalOrder>> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/rentals/${rentalOrderId}/return`,
-    {
-      method: "PATCH",
-      credentials: "include",
-    },
-  );
+  const res = await fetch(`${API_BASE}/rentals/${rentalOrderId}/return`, {
+    method: "PATCH",
+    credentials: "include",
+  });
 
   const body: ApiEnvelope<RentalOrder> = await res.json();
 

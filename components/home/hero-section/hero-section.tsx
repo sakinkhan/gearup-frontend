@@ -7,7 +7,7 @@ import Link from "next/link";
 import { BecomeProviderButton } from "./hero-button";
 
 async function getGears(): Promise<Gear[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/gears`, {
+  const res = await fetch(`${process.env.BACKEND_API_URL}/gears`, {
     cache: "no-store",
   });
 

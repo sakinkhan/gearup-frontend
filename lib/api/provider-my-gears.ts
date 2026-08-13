@@ -34,15 +34,14 @@ interface ProviderMyGearsResponse {
   data: ProviderGear[];
 }
 
+const API_BASE = "/api";
+
 export async function fetchProviderMyGears(): Promise<ProviderGear[]> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/provider/my-gears`,
-    {
-      method: "GET",
-      credentials: "include",
-      cache: "no-store",
-    },
-  );
+  const response = await fetch(`${API_BASE}/provider/my-gears`, {
+    method: "GET",
+    credentials: "include",
+    cache: "no-store",
+  });
 
   const result: ProviderMyGearsResponse = await response.json();
 
@@ -70,17 +69,14 @@ export async function updateProviderGear(
   id: string,
   payload: UpdateGearPayload,
 ) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/provider/gear/${id}`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(payload),
+  const response = await fetch(`${API_BASE}/provider/gear/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    credentials: "include",
+    body: JSON.stringify(payload),
+  });
 
   const result = await response.json();
 
@@ -92,13 +88,10 @@ export async function updateProviderGear(
 }
 
 export async function deleteProviderGear(id: string) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/provider/gear/${id}`,
-    {
-      method: "DELETE",
-      credentials: "include",
-    },
-  );
+  const response = await fetch(`${API_BASE}/provider/gear/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
 
   const result = await response.json();
 
@@ -124,17 +117,14 @@ export interface CreateGearPayload {
 }
 
 export async function createProviderGear(payload: CreateGearPayload) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/provider/gear`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(payload),
+  const response = await fetch(`${API_BASE}/provider/gear`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    credentials: "include",
+    body: JSON.stringify(payload),
+  });
 
   const result = await response.json();
 

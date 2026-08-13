@@ -26,6 +26,8 @@ import type { Gear } from "@/types/gear";
 import { createCheckoutSession } from "@/lib/api/payment";
 import { Textarea } from "../ui/textarea";
 
+const API_BASE = "/api";
+
 export function RentNowCard({ gear }: { gear: Gear }) {
   const [range, setRange] = useState<DateRange | undefined>();
   const [quantity, setQuantity] = useState(1);
@@ -73,28 +75,25 @@ export function RentNowCard({ gear }: { gear: Gear }) {
 
     try {
       // 1. Create rental order
-      const rentalResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/rentals`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            gearId: gear.id,
-            rentalStartDate: range.from.toISOString(),
-            rentalEndDate: range.to.toISOString(),
-            notes: notes.trim(),
-            items: [
-              {
-                gearItemId: gear.id,
-                quantity,
-              },
-            ],
-          }),
+      const rentalResponse = await fetch(`${API_BASE}/rentals`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          gearId: gear.id,
+          rentalStartDate: range.from.toISOString(),
+          rentalEndDate: range.to.toISOString(),
+          notes: notes.trim(),
+          items: [
+            {
+              gearItemId: gear.id,
+              quantity,
+            },
+          ],
+        }),
+      });
 
       const rentalResult = await rentalResponse.json();
 

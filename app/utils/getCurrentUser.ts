@@ -1,5 +1,7 @@
 import { cookies } from "next/headers";
 
+const API_BASE = "/api";
+
 export type CurrentUser = {
   id: string;
   name: string;
@@ -20,15 +22,12 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   }
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/users/me`,
-      {
-        headers: {
-          Cookie: `accessToken=${token}`,
-        },
-        cache: "no-store",
+    const res = await fetch(`${API_BASE}/users/me`, {
+      headers: {
+        Cookie: `accessToken=${token}`,
       },
-    );
+      cache: "no-store",
+    });
 
     if (!res.ok) {
       return null;

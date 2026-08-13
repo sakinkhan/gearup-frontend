@@ -1,7 +1,6 @@
 import type { ApiResponse, Gear, GearFilters } from "@/types/gear";
-
-const API_URL =
-  process.env.NEXT_PUBLIC_BACKEND_API_URL || "http://localhost:5000/api";
+const API_BASE = "/api";
+const API_URL = API_BASE || "http://localhost:5000/api";
 
 function buildQuery(filters: GearFilters = {}) {
   const params = new URLSearchParams();

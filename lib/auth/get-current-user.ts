@@ -11,18 +11,21 @@ export type CurrentUser = {
   status: string;
 };
 
+const API_URL = process.env.BACKEND_API_URL;
+
+if (!API_URL) {
+  throw new Error("BACKEND_API_URL is not configured");
+}
+
 export async function getCurrentUser(): Promise<CurrentUser | null> {
   const cookieStore = await cookies();
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/users/me`,
-    {
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
-      cache: "no-store",
+  const res = await fetch(`${API_URL}/users/me`, {
+    headers: {
+      Cookie: cookieStore.toString(),
     },
-  );
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     return null;

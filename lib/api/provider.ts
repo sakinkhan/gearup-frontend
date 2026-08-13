@@ -6,16 +6,14 @@ interface ApiEnvelope<T> {
   message: string;
   data: T;
 }
+const API_BASE = "/api";
 
 export async function fetchProviderOrders(): Promise<
   ApiEnvelope<ProviderRentalOrder[]>
 > {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/provider/orders`,
-    {
-      credentials: "include",
-    },
-  );
+  const res = await fetch(`${API_BASE}/provider/orders`, {
+    credentials: "include",
+  });
 
   const body: ApiEnvelope<ProviderRentalOrder[]> = await res.json();
 
