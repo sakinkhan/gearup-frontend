@@ -31,7 +31,7 @@ function getOrderAction(status: RentalStatus) {
 
     case "PICKED_UP":
       return {
-        label: "Marked Returned",
+        label: "Mark Returned",
         nextStatus: "RETURNED" as const,
         disabled: false,
       };

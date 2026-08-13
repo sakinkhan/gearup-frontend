@@ -39,10 +39,6 @@ const ProviderDashboardPage = () => {
       status: "Returned",
       count: orders.filter((order) => order.status === "RETURNED").length,
     },
-    {
-      status: "Completed",
-      count: orders.filter((order) => order.status === "COMPLETED").length,
-    },
   ];
 
   const inventoryData = gears.map((gear) => ({

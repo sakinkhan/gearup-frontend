@@ -24,10 +24,12 @@ import { Separator } from "@/components/ui/separator";
 import { toNumber } from "@/lib/api/gears";
 import type { Gear } from "@/types/gear";
 import { createCheckoutSession } from "@/lib/api/payment";
+import { Textarea } from "../ui/textarea";
 
 export function RentNowCard({ gear }: { gear: Gear }) {
   const [range, setRange] = useState<DateRange | undefined>();
   const [quantity, setQuantity] = useState(1);
+  const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const pricePerDay = toNumber(gear.rentalPricePerDay);
@@ -83,7 +85,7 @@ export function RentNowCard({ gear }: { gear: Gear }) {
             gearId: gear.id,
             rentalStartDate: range.from.toISOString(),
             rentalEndDate: range.to.toISOString(),
-            notes: "",
+            notes: notes.trim(),
             items: [
               {
                 gearItemId: gear.id,
@@ -141,6 +143,10 @@ export function RentNowCard({ gear }: { gear: Gear }) {
       </CardHeader>
 
       <CardContent className="space-y-4">
+        <p className="text-xs text-muted-foreground">
+          {gear.availableStock} of {gear.stock} unit{gear.stock > 1 ? "s" : ""}{" "}
+          available
+        </p>
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -201,6 +207,27 @@ export function RentNowCard({ gear }: { gear: Gear }) {
           </div>
         </div>
 
+        {/* Notes */}
+        <div className="space-y-2">
+          <label htmlFor="customer-notes" className="text-sm font-medium">
+            Customer notes
+          </label>
+
+          <Textarea
+            id="customer-notes"
+            placeholder="Add any special instructions or notes for the provider..."
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            disabled={!isAvailable || isSubmitting}
+            rows={3}
+            maxLength={500}
+          />
+
+          <div className="text-right text-xs text-muted-foreground">
+            {notes.length}/500
+          </div>
+        </div>
+
         {days > 0 && (
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
@@ -223,11 +250,6 @@ export function RentNowCard({ gear }: { gear: Gear }) {
             </div>
           </div>
         )}
-
-        <p className="text-xs text-muted-foreground">
-          {gear.availableStock} of {gear.stock} unit{gear.stock > 1 ? "s" : ""}{" "}
-          available
-        </p>
       </CardContent>
 
       <CardFooter>

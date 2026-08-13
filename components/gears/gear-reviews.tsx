@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 type GearReview = {
   id: string;
   rating: number;
-  comment: string;
+  comment?: string;
   createdAt: string;
   customer?: {
     id: string;

@@ -54,9 +54,13 @@ const roleMenuItems: Record<Role, MenuItem[]> = {
   ],
   ADMIN: [
     { title: "Dashboard", path: "", icon: LayoutDashboard },
-    { title: "Users", path: "/users", icon: Users },
-    { title: "Gear", path: "/gears", icon: Boxes },
-    { title: "Rentals", path: "/rentals", icon: ClipboardList },
+    { title: "User Management", path: "/user-management", icon: Users },
+    { title: "Gear Management", path: "/gear-management", icon: Boxes },
+    {
+      title: "Rental Management",
+      path: "/rental-management",
+      icon: ClipboardList,
+    },
   ],
 };
 
