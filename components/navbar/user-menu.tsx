@@ -64,6 +64,24 @@ export default function UserMenu({ user }: Props) {
 
     router.refresh();
   }
+  const toProperCase = (value: string) =>
+    value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+
+  const roleBadgeClasses = (role: string) => {
+    switch (role) {
+      case "ADMIN":
+        return "border-purple-500 text-purple-600 dark:text-purple-400";
+
+      case "PROVIDER":
+        return "border-blue-500 text-blue-600 dark:text-blue-400";
+
+      case "CUSTOMER":
+        return "border-green-500 text-green-600 dark:text-green-400";
+
+      default:
+        return "border-gray-500 text-gray-600 dark:text-gray-400";
+    }
+  };
 
   return (
     <DropdownMenu>
@@ -98,11 +116,12 @@ export default function UserMenu({ user }: Props) {
               </p>
 
               <span
-                className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${roleBadgeClasses(
+                className={`mt-1 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-medium ${roleBadgeClasses(
                   user.role,
                 )}`}
               >
-                {user.role.toLowerCase()}
+                {user.role.charAt(0).toUpperCase() +
+                  user.role.slice(1).toLowerCase()}
               </span>
             </div>
           </div>

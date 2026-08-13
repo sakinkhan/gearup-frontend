@@ -104,6 +104,21 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
       setIsUpdating(false);
     }
   }
+  const roleBadgeClasses = (role: string) => {
+  switch (role) {
+    case "ADMIN":
+      return "border-purple-500 text-purple-600 dark:text-purple-400";
+
+    case "PROVIDER":
+      return "border-blue-500 text-blue-600 dark:text-blue-400";
+
+    case "CUSTOMER":
+      return "border-green-500 text-green-600 dark:text-green-400";
+
+    default:
+      return "border-gray-500 text-gray-600 dark:text-gray-400";
+  }
+};
 
   return (
     <>
