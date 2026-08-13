@@ -5,8 +5,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   fetchProviderOrders,
   updateProviderOrderStatus,
-  type RentalStatus,
 } from "@/lib/api/provider-orders";
+
+import type { RentalStatus } from "@/types/provider";
 
 export function useProviderOrders() {
   return useQuery({
