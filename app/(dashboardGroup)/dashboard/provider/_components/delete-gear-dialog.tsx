@@ -62,7 +62,7 @@ export function DeleteGearDialog({
           <AlertDialogAction
             onClick={handleDelete}
             disabled={deleteGear.isPending}
-            className="bg-destructive! text-white hover:bg-destructive/60! hover:text-black"
+            className="bg-destructive! text-white hover:bg-destructive/60! hover:text-black!"
           >
             {deleteGear.isPending ? "Deleting..." : "Delete Gear"}
           </AlertDialogAction>

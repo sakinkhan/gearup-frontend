@@ -1,4 +1,4 @@
-import { GearCardSkeleton } from "@/components/gears/gear-card-skeleton";
+import { GearCardSkeleton } from "@/app/(publicGroup)/gears/_components/gear-card-skeleton";
 
 export default function GearsLoading() {
   return (

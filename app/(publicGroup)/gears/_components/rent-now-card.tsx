@@ -24,7 +24,7 @@ import { Separator } from "@/components/ui/separator";
 import { toNumber } from "@/lib/api/gears";
 import type { Gear } from "@/types/gear";
 import { createCheckoutSession } from "@/lib/api/payment";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../../../../components/ui/textarea";
 
 const API_BASE = "/api";
 

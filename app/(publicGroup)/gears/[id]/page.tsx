@@ -1,12 +1,12 @@
 import { notFound, redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-import { GearGallery } from "@/components/gears/gear-gallery";
-import { GearSpecs } from "@/components/gears/gear-specs";
-import { RentNowCard } from "@/components/gears/rent-now-card";
-import { ProviderInfo } from "@/components/gears/provider-info";
+import { GearGallery } from "@/app/(publicGroup)/gears/_components/gear-gallery";
+import { GearSpecs } from "@/app/(publicGroup)/gears/_components/gear-specs";
+import { RentNowCard } from "@/app/(publicGroup)/gears/_components/rent-now-card";
+import { ProviderInfo } from "@/app/(publicGroup)/gears/_components/provider-info";
 import { requireAuth } from "@/lib/validations/require-auth";
 import { fetchGearById } from "@/lib/api/server/gears";
-import { GearReviews } from "@/components/gears/gear-reviews";
+import { GearReviews } from "@/app/(publicGroup)/gears/_components/gear-reviews";
 
 type Props = {
   params: Promise<{

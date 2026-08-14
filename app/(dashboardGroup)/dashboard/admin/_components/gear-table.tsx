@@ -1,9 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
 import type { Gear } from "@/types/gear";
-
 import {
   Table,
   TableBody,
@@ -12,13 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
-
 import Image from "next/image";
 import Link from "next/link";
 import { updateGearStatus } from "@/lib/api/admin";
@@ -129,17 +124,17 @@ export function GearTable({ initialGears }: GearTableProps) {
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-lg border">
-        <Table>
+      <div className="overflow-x-auto rounded-lg border">
+        <Table className="min-w-225 text-sm">
           <TableHeader>
             <TableRow>
-              <TableHead>Gear</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Provider</TableHead>
-              <TableHead>Price / Day</TableHead>
-              <TableHead>Condition</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Action</TableHead>
+              <TableHead className="w-55">Gear</TableHead>
+              <TableHead className="w-32.5">Category</TableHead>
+              <TableHead className="w-50">Provider</TableHead>
+              <TableHead className="w-27.5">Price / Day</TableHead>
+              <TableHead className="w-30">Condition</TableHead>
+              <TableHead className="w-27.5">Status</TableHead>
+              <TableHead className="w-30 text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -155,24 +150,24 @@ export function GearTable({ initialGears }: GearTableProps) {
                 <TableRow key={gear.id}>
                   {/* Gear */}
                   <TableCell>
-                    <div className="flex items-center gap-3">
+                    <div className="flex min-w-0 items-center gap-2">
                       <Image
                         src={gear.image}
                         alt={gear.name}
                         width={40}
                         height={40}
-                        className="size-10 rounded-md object-cover"
+                        className="size-9 shrink-0 rounded-md object-cover sm:size-10"
                       />
 
                       <div className="min-w-0">
                         <Link
                           href={`/gears/${gear.id}`}
-                          className="font-medium hover:underline"
+                          className="block max-w-37.5 truncate font-medium hover:underline sm:max-w-45"
                         >
                           {gear.name}
                         </Link>
 
-                        <p className="text-muted-foreground text-xs">
+                        <p className="text-muted-foreground truncate text-[11px] sm:text-xs">
                           {gear.brand}
                         </p>
                       </div>
@@ -185,9 +180,17 @@ export function GearTable({ initialGears }: GearTableProps) {
                   {/* Provider */}
                   <TableCell>
                     <div>
-                      <p className="font-medium">{gear.provider.name}</p>
+                      <p
+                        className="max-w-37.5 truncate font-medium sm:max-w-45"
+                        title={gear.provider.name}
+                      >
+                        {gear.provider.name}
+                      </p>
 
-                      <p className="text-muted-foreground text-xs">
+                      <p
+                        className="text-muted-foreground max-w-37.5 truncate text-[11px] sm:max-w-45 sm:text-xs"
+                        title={gear.provider.email}
+                      >
                         {gear.provider.email}
                       </p>
                     </div>
@@ -225,7 +228,7 @@ export function GearTable({ initialGears }: GearTableProps) {
                     {gear.status === "INACTIVE" ? (
                       <Button
                         size="sm"
-                        className="bg-green-600 text-white hover:bg-green-700"
+                        className="bg-green-600 text-white hover:bg-green-700 h-8 px-2 text-xs sm:px-3 sm:text-sm"
                         onClick={() => setSelectedGear(gear)}
                       >
                         Reactivate
@@ -234,6 +237,7 @@ export function GearTable({ initialGears }: GearTableProps) {
                       <Button
                         variant="destructive"
                         size="sm"
+                        className="h-8 px-2 text-xs sm:px-3 sm:text-sm"
                         onClick={() => setSelectedGear(gear)}
                       >
                         Deactivate
@@ -248,8 +252,8 @@ export function GearTable({ initialGears }: GearTableProps) {
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between">
-        <p className="text-muted-foreground text-sm">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-muted-foreground text-xs sm:text-sm">
           Showing{" "}
           {filteredGears.length === 0
             ? 0
@@ -262,23 +266,25 @@ export function GearTable({ initialGears }: GearTableProps) {
           <Button
             variant="outline"
             size="icon"
+            className="size-8"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((page) => page - 1)}
           >
-            <ChevronLeft />
+            <ChevronLeft className="size-4" />
           </Button>
 
-          <span className="text-sm">
+          <span className="text-xs sm:text-sm">
             Page {currentPage} of {totalPages}
           </span>
 
           <Button
             variant="outline"
             size="icon"
+            className="size-8"
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((page) => page + 1)}
           >
-            <ChevronRight />
+            <ChevronRight className="size-4" />
           </Button>
         </div>
       </div>

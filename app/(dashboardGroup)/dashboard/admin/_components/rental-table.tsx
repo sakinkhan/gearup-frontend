@@ -1,9 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
 import type { RentalOrder, RentalOrderStatus } from "@/types/rental";
-
 import {
   Table,
   TableBody,
@@ -12,13 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
-
 import Image from "next/image";
 import Link from "next/link";
 import { RentalDetailsDialog } from "./rental-details-dialog";
@@ -124,17 +119,17 @@ export function RentalTable({ initialOrders }: RentalTableProps) {
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-lg border">
-        <Table>
+      <div className="overflow-x-auto rounded-lg border">
+        <Table className="min-w-225 text-sm">
           <TableHeader>
             <TableRow>
-              <TableHead>Order</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Gear</TableHead>
-              <TableHead>Rental Period</TableHead>
-              <TableHead>Total</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Action</TableHead>
+              <TableHead className="w-27.5">Order</TableHead>
+              <TableHead className="w-47.5">Customer</TableHead>
+              <TableHead className="w-60">Gear</TableHead>
+              <TableHead className="w-35">Rental Period</TableHead>
+              <TableHead className="w-27.5">Total</TableHead>
+              <TableHead className="w-32.5">Status</TableHead>
+              <TableHead className="w-30 text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -157,10 +152,18 @@ export function RentalTable({ initialOrders }: RentalTableProps) {
 
                   {/* Customer */}
                   <TableCell>
-                    <div>
-                      <p className="font-medium">{order.customer.name}</p>
+                    <div className="min-w-0">
+                      <p
+                        className="max-w-35 truncate font-medium sm:max-w-42.5"
+                        title={order.customer.name}
+                      >
+                        {order.customer.name}
+                      </p>
 
-                      <p className="text-muted-foreground text-xs">
+                      <p
+                        className="text-muted-foreground max-w-35 truncate text-[11px] sm:max-w-42.5 sm:text-xs"
+                        title={order.customer.email}
+                      >
                         {order.customer.email}
                       </p>
                     </div>
@@ -170,24 +173,28 @@ export function RentalTable({ initialOrders }: RentalTableProps) {
                   <TableCell>
                     <div className="space-y-2">
                       {order.rentalItems.map((item) => (
-                        <div key={item.id} className="flex items-center gap-2">
+                        <div
+                          key={item.id}
+                          className="flex min-w-0 items-center gap-2"
+                        >
                           <Image
                             src={item.gearItem.image}
                             alt={item.gearItem.name}
                             width={36}
                             height={36}
-                            className="size-9 rounded-md object-cover"
+                            className="size-8 shrink-0 rounded-md object-cover sm:size-9"
                           />
 
                           <div className="min-w-0">
                             <Link
                               href={`/gears/${item.gearItem.id}`}
-                              className="font-medium hover:underline"
+                              className="block max-w-40 truncate text-xs font-medium hover:underline sm:max-w-47.5 sm:text-sm"
+                              title={item.gearItem.name}
                             >
                               {item.gearItem.name}
                             </Link>
 
-                            <p className="text-muted-foreground text-xs">
+                            <p className="text-muted-foreground text-[11px] sm:text-xs">
                               Qty: {item.quantity}
                             </p>
                           </div>
@@ -198,7 +205,7 @@ export function RentalTable({ initialOrders }: RentalTableProps) {
 
                   {/* Rental Period */}
                   <TableCell>
-                    <div className="text-sm">
+                    <div className="text-xs sm:text-sm">
                       <p>
                         {new Date(order.rentalStartDate).toLocaleDateString()}
                       </p>
@@ -207,7 +214,7 @@ export function RentalTable({ initialOrders }: RentalTableProps) {
                         to {new Date(order.rentalEndDate).toLocaleDateString()}
                       </p>
 
-                      <p className="text-muted-foreground text-xs">
+                      <p className="text-muted-foreground text-[11px] sm:text-xs">
                         {order.totalDays}{" "}
                         {order.totalDays === 1 ? "day" : "days"}
                       </p>
@@ -215,13 +222,16 @@ export function RentalTable({ initialOrders }: RentalTableProps) {
                   </TableCell>
 
                   {/* Total */}
-                  <TableCell className="font-medium">
+                  <TableCell className="text-xs font-medium sm:text-sm">
                     ${Number(order.totalAmount).toFixed(2)}
                   </TableCell>
 
                   {/* Status */}
                   <TableCell>
-                    <Badge variant={getStatusVariant(order.status)}>
+                    <Badge
+                      variant={getStatusVariant(order.status)}
+                      className="text-[11px] sm:text-xs"
+                    >
                       {formatStatus(order.status)}
                     </Badge>
                   </TableCell>
@@ -243,8 +253,8 @@ export function RentalTable({ initialOrders }: RentalTableProps) {
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between">
-        <p className="text-muted-foreground text-sm">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-muted-foreground text-xs sm:text-sm">
           Showing{" "}
           {filteredOrders.length === 0
             ? 0
@@ -257,23 +267,25 @@ export function RentalTable({ initialOrders }: RentalTableProps) {
           <Button
             variant="outline"
             size="icon"
+            className="size-8"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((page) => page - 1)}
           >
-            <ChevronLeft />
+            <ChevronLeft className="size-4" />
           </Button>
 
-          <span className="text-sm">
+          <span className="text-xs sm:text-sm">
             Page {currentPage} of {totalPages}
           </span>
 
           <Button
             variant="outline"
             size="icon"
+            className="size-8"
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((page) => page + 1)}
           >
-            <ChevronRight />
+            <ChevronRight className="size-4" />
           </Button>
         </div>
       </div>

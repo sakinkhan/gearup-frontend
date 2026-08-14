@@ -6,7 +6,7 @@ const GlobalLoading = () => {
       <p className="text-5xl font-bold text-center flex items-center justify-center text-primary">
         L
         <Spinner className="size-8 mt-3 mx-1 text-chart-3" />
-        ading...
+        ading
       </p>
     </div>
   );

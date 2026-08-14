@@ -110,18 +110,15 @@ export default function UserMenu({ user }: Props) {
 
             <div className="min-w-0">
               <p className="truncate font-medium">{user.name}</p>
-
               <p className="truncate text-xs text-muted-foreground">
                 {user.email}
               </p>
-
               <span
                 className={`mt-1 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-medium ${roleBadgeClasses(
                   user.role,
                 )}`}
               >
-                {user.role.charAt(0).toUpperCase() +
-                  user.role.slice(1).toLowerCase()}
+                {toProperCase(user.role)}
               </span>
             </div>
           </div>

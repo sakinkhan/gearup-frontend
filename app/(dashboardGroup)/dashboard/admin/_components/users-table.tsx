@@ -105,20 +105,20 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
     }
   }
   const roleBadgeClasses = (role: string) => {
-  switch (role) {
-    case "ADMIN":
-      return "border-purple-500 text-purple-600 dark:text-purple-400";
+    switch (role) {
+      case "ADMIN":
+        return "border-purple-500 text-purple-600 dark:text-purple-400";
 
-    case "PROVIDER":
-      return "border-blue-500 text-blue-600 dark:text-blue-400";
+      case "PROVIDER":
+        return "border-blue-500 text-blue-600 dark:text-blue-400";
 
-    case "CUSTOMER":
-      return "border-green-500 text-green-600 dark:text-green-400";
+      case "CUSTOMER":
+        return "border-green-500 text-green-600 dark:text-green-400";
 
-    default:
-      return "border-gray-500 text-gray-600 dark:text-gray-400";
-  }
-};
+      default:
+        return "border-gray-500 text-gray-600 dark:text-gray-400";
+    }
+  };
 
   return (
     <>
@@ -136,16 +136,16 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
         </div>
 
         {/* Table */}
-        <div className="overflow-hidden rounded-lg border">
-          <Table>
+        <div className="overflow-x-auto rounded-lg border">
+          <Table className="min-w-187.5 text-sm">
             <TableHeader>
               <TableRow>
-                <TableHead>User</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Joined</TableHead>
-                <TableHead className="text-right">Action</TableHead>
+                <TableHead className="w-50">User</TableHead>
+                <TableHead className="w-55">Email</TableHead>
+                <TableHead className="w-30">Role</TableHead>
+                <TableHead className="w-30">Status</TableHead>
+                <TableHead className="w-30">Joined</TableHead>
+                <TableHead className="w-30 text-right">Action</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -160,8 +160,8 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
                 paginatedUsers.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell>
-                      <div className="flex items-center gap-3">
-                        <Avatar className="size-8">
+                      <div className="flex min-w-0 items-center gap-2">
+                        <Avatar className="size-8 shrink-0">
                           <AvatarImage
                             src={user.image || undefined}
                             alt={user.name}
@@ -176,22 +176,28 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
                           </AvatarFallback>
                         </Avatar>
 
-                        <span className="font-medium">{user.name}</span>
+                        <span
+                          className="max-w-35 truncate font-medium sm:max-w-42.5"
+                          title={user.name}
+                        >
+                          {user.name}
+                        </span>
                       </div>
                     </TableCell>
 
-                    <TableCell>{user.email}</TableCell>
+                    <TableCell>
+                      <span
+                        className="block max-w-40 truncate text-xs sm:max-w-50 sm:text-sm"
+                        title={user.email}
+                      >
+                        {user.email}
+                      </span>
+                    </TableCell>
 
                     <TableCell>
                       <Badge
                         variant="outline"
-                        className={
-                          user.role === "ADMIN"
-                            ? "border-purple-500 text-purple-600 dark:text-purple-400"
-                            : user.role === "PROVIDER"
-                              ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                              : "border-green-500 text-green-600 dark:text-green-400"
-                        }
+                        className={`text-[11px] sm:text-xs ${roleBadgeClasses(user.role)}`}
                       >
                         {formatLabel(user.role)}
                       </Badge>
@@ -202,6 +208,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
                         variant={
                           user.status === "ACTIVE" ? "default" : "destructive"
                         }
+                        className="text-[11px] sm:text-xs"
                       >
                         {formatLabel(user.status)}
                       </Badge>
@@ -214,7 +221,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
                     <TableCell className="text-right">
                       {user.role === "ADMIN" ? (
                         <Button
-                          className="text-muted-foreground text-sm"
+                          className="text-muted-foreground h-8 px-2 text-xs sm:px-3 sm:text-sm"
                           disabled
                           variant="outline"
                         >
@@ -226,6 +233,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
                             user.status === "ACTIVE" ? "destructive" : "default"
                           }
                           size="sm"
+                          className="h-8 px-2 text-xs sm:px-3 sm:text-sm"
                           onClick={() => setSelectedUser(user)}
                         >
                           {user.status === "ACTIVE" ? "Suspend" : "Activate"}
@@ -240,8 +248,8 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between">
-          <p className="text-muted-foreground text-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-muted-foreground text-xs sm:text-sm">
             Showing{" "}
             {filteredUsers.length === 0
               ? 0
@@ -254,23 +262,25 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
             <Button
               variant="outline"
               size="icon"
+              className="size-8"
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((page) => page - 1)}
             >
-              <ChevronLeft />
+              <ChevronLeft className="size-4" />
             </Button>
 
-            <span className="text-sm">
+            <span className="text-xs sm:text-sm">
               Page {currentPage} of {totalPages}
             </span>
 
             <Button
               variant="outline"
               size="icon"
+              className="size-8"
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((page) => page + 1)}
             >
-              <ChevronRight />
+              <ChevronRight className="size-4" />
             </Button>
           </div>
         </div>

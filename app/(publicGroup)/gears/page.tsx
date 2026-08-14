@@ -1,4 +1,4 @@
-import { GearsExplorer } from "@/components/gears/gears-explorer";
+import { GearsExplorer } from "@/app/(publicGroup)/gears/_components/gears-explorer";
 
 export const metadata = {
   title: "Browse Gears | GearUp",

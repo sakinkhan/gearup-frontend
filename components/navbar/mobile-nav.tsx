@@ -40,12 +40,29 @@ import {
   navLinks,
 } from "@/app/utils/navbar-utils/nav-links";
 import GearUpLogo from "../ui/gearup-logo";
-import { ThemeToggle } from "../ui/theme-toggle";
 import { getInitials } from "@/app/utils/navbar-utils/utils";
 
 type Props = {
   user: NavbarUser | null;
 };
+const roleBadgeClasses = (role: string) => {
+  switch (role) {
+    case "ADMIN":
+      return "border-purple-500 text-purple-600 dark:text-purple-400";
+
+    case "PROVIDER":
+      return "border-blue-500 text-blue-600 dark:text-blue-400";
+
+    case "CUSTOMER":
+      return "border-green-500 text-green-600 dark:text-green-400";
+
+    default:
+      return "border-gray-500 text-gray-600 dark:text-gray-400";
+  }
+};
+
+const toProperCase = (value: string) =>
+  value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 
 export default function MobileNav({ user }: Props) {
   const pathname = usePathname();
@@ -152,6 +169,13 @@ export default function MobileNav({ user }: Props) {
                   <p className="truncate text-xs text-muted-foreground">
                     {user.email}
                   </p>
+                  <span
+                    className={`mt-1 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-medium ${roleBadgeClasses(
+                      user.role,
+                    )}`}
+                  >
+                    {toProperCase(user.role)}
+                  </span>
                 </div>
               </div>
 
