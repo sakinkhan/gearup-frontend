@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { differenceInCalendarDays } from "date-fns";
 import { CalendarIcon, Minus, Plus } from "lucide-react";
 import type { DateRange } from "react-day-picker";
@@ -33,6 +33,40 @@ export function RentNowCard({ gear }: { gear: Gear }) {
   const [quantity, setQuantity] = useState(1);
   const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [unavailableRanges, setUnavailableRanges] = useState<
+    { from: Date; to: Date }[]
+  >([]);
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      try {
+        const response = await fetch(
+          `${API_BASE}/rentals/gear/${gear.id}/availability`,
+          {
+            credentials: "include",
+          },
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "Failed to fetch availability");
+        }
+
+        setUnavailableRanges(
+          result.data.map(
+            (rental: { rentalStartDate: string; rentalEndDate: string }) => ({
+              from: new Date(rental.rentalStartDate),
+              to: new Date(rental.rentalEndDate),
+            }),
+          ),
+        );
+      } catch (error) {
+        console.error("Failed to fetch gear availability:", error);
+      }
+    };
+
+    fetchAvailability();
+  }, [gear.id]);
 
   const pricePerDay = toNumber(gear.rentalPricePerDay);
   const deposit = toNumber(gear.depositAmount);
@@ -164,7 +198,7 @@ export function RentNowCard({ gear }: { gear: Gear }) {
               mode="range"
               selected={range}
               onSelect={setRange}
-              disabled={{ before: new Date() }}
+              disabled={[{ before: new Date() }, ...unavailableRanges]}
               numberOfMonths={1}
             />
           </PopoverContent>
