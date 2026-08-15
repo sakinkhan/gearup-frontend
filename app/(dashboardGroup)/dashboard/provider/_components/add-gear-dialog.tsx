@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 
 import {
   Dialog,
@@ -82,10 +83,16 @@ export function AddGearDialog({ open, onOpenChange }: AddGearDialogProps) {
         image,
       });
 
+      toast.success("Gear added successfully!");
+
       resetForm();
       onOpenChange(false);
-    } catch {
-      // Error is available through createGear.error
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to add gear. Please try again.",
+      );
     }
   };
 
