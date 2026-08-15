@@ -3,6 +3,15 @@ import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 
 import GearUpLogo from "./gearup-logo";
+type FooterLink = {
+  label: string;
+  href?: string;
+};
+
+type FooterLinkColumn = {
+  title: string;
+  links: FooterLink[];
+};
 
 function XIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -15,7 +24,7 @@ function XIcon(props: SVGProps<SVGSVGElement>) {
 function InstagramIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
-      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM12 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-4.849 0-3.204-.012-3.584-.069-4.849-.149-3.227-1.664-4.771-4.919-4.919-1.266-.057-1.645-.069-4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM12 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
     </svg>
   );
 }
@@ -29,37 +38,48 @@ function FacebookIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 const socialLinks = [
-  { label: "X (Twitter)", href: "https://twitter.com", icon: XIcon },
-  { label: "Instagram", href: "https://instagram.com", icon: InstagramIcon },
-  { label: "Facebook", href: "https://facebook.com", icon: FacebookIcon },
+  {
+    label: "X (Twitter)",
+    href: "https://twitter.com",
+    icon: XIcon,
+  },
+  {
+    label: "Instagram",
+    href: "https://instagram.com",
+    icon: InstagramIcon,
+  },
+  {
+    label: "Facebook",
+    href: "https://facebook.com",
+    icon: FacebookIcon,
+  },
 ];
 
-const footerLinks = [
+const footerLinks: FooterLinkColumn[] = [
   {
     title: "Explore",
     links: [
       { label: "Browse Gears", href: "/gears" },
-      { label: "Categories", href: "/gears/categories" },
-      { label: "Become a Provider", href: "/providers/apply" },
-      { label: "How It Works", href: "/how-it-works" },
+      { label: "Categories", href: "/gears" },
+      { label: "Become a Provider", href: "/auth/register?role=PROVIDER" },
     ],
   },
   {
     title: "Company",
     links: [
-      { label: "About Us", href: "/about" },
-      { label: "Careers", href: "/careers" },
-      { label: "Blog", href: "/blog" },
-      { label: "Contact", href: "/contact" },
+      { label: "About Us" },
+      { label: "Careers" },
+      { label: "Blog" },
+      { label: "Contact" },
     ],
   },
   {
     title: "Support",
     links: [
       { label: "Help Center", href: "/support" },
-      { label: "Safety & Trust", href: "/safety" },
-      { label: "Terms of Service", href: "/legal/terms" },
-      { label: "Privacy Policy", href: "/legal/privacy" },
+      { label: "Safety & Trust", href: "/support" },
+      { label: "Terms of Service", href: "/support" },
+      { label: "Privacy Policy", href: "/support" },
     ],
   },
 ];
@@ -87,6 +107,7 @@ export function Footer() {
                 <MapPin className="size-4 shrink-0 text-primary" />
                 Canberra, Australia
               </li>
+
               <li className="flex items-center gap-2">
                 <Mail className="size-4 shrink-0 text-primary" />
                 <a
@@ -96,6 +117,7 @@ export function Footer() {
                   support@gearup.com
                 </a>
               </li>
+
               <li className="flex items-center gap-2">
                 <Phone className="size-4 shrink-0 text-primary" />
                 <a href="tel:+611234567890" className="hover:text-foreground">
@@ -127,15 +149,22 @@ export function Footer() {
               <h3 className="text-sm font-semibold text-foreground">
                 {column.title}
               </h3>
+
               <ul className="flex flex-col gap-2.5">
                 {column.links.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-primary"
-                    >
-                      {link.label}
-                    </Link>
+                  <li key={link.label}>
+                    {link.href ? (
+                      <Link
+                        href={link.href}
+                        className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <span className="cursor-default text-sm text-muted-foreground">
+                        {link.label}
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -151,28 +180,21 @@ export function Footer() {
 
           <ul className="flex items-center gap-6">
             <li>
-              <Link
-                href="/legal/terms"
-                className="text-xs text-muted-foreground hover:text-foreground"
-              >
+              <span className="cursor-default text-xs text-muted-foreground">
                 Terms
-              </Link>
+              </span>
             </li>
+
             <li>
-              <Link
-                href="/legal/privacy"
-                className="text-xs text-muted-foreground hover:text-foreground"
-              >
+              <span className="cursor-default text-xs text-muted-foreground">
                 Privacy
-              </Link>
+              </span>
             </li>
+
             <li>
-              <Link
-                href="/legal/cookies"
-                className="text-xs text-muted-foreground hover:text-foreground"
-              >
+              <span className="cursor-default text-xs text-muted-foreground">
                 Cookies
-              </Link>
+              </span>
             </li>
           </ul>
         </div>

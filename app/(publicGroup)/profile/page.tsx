@@ -92,10 +92,19 @@ export default function ProfilePage() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isDirty },
   } = useForm<UpdateProfileFormValues>({
     resolver: zodResolver(updateProfileSchema),
-    defaultValues: { name: "", phone: "", address: "" },
+    mode: "onChange",
+    defaultValues: {
+      name: "",
+      phone: "",
+      address: "",
+      image: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
 
   useEffect(() => {
@@ -104,6 +113,7 @@ export default function ProfilePage() {
         name: user.name ?? "",
         phone: user.phone ?? "",
         address: user.address ?? "",
+        image: user.image ?? "",
       });
     }
   }, [user, reset]);
@@ -114,6 +124,7 @@ export default function ProfilePage() {
         name: values.name,
         phone: values.phone || undefined,
         address: values.address || undefined,
+        image: values.image || undefined,
       },
       {
         onSuccess: () => setIsEditing(false),
@@ -127,6 +138,7 @@ export default function ProfilePage() {
         name: user.name ?? "",
         phone: user.phone ?? "",
         address: user.address ?? "",
+        image: user.image ?? "",
       });
     }
     setIsEditing(false);
@@ -260,6 +272,7 @@ export default function ProfilePage() {
               register={register}
               errors={errors}
               handleSubmit={handleSubmit}
+              watch={watch}
               onSubmit={onSubmit}
               onCancel={handleCancel}
               isDirty={isDirty}

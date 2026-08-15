@@ -1,23 +1,29 @@
 import { ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 import { Gear } from "@/types/gear";
 import { Button } from "../../ui/button";
 import HeroSlideshow from "./hero-slideshow";
-import Link from "next/link";
 import { BecomeProviderButton } from "./hero-button";
 
 async function getGears(): Promise<Gear[]> {
-  const res = await fetch(`${process.env.BACKEND_API_URL}/gears`, {
-    cache: "no-store",
-  });
+  try {
+    const res = await fetch(`${process.env.BACKEND_API_URL}/gears`, {
+      cache: "no-store",
+    });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch gears");
+    if (!res.ok) {
+      console.error(`Failed to fetch gears: ${res.status} ${res.statusText}`);
+      return [];
+    }
+
+    const data = await res.json();
+
+    return data.data ?? [];
+  } catch (error) {
+    console.error("Failed to fetch gears:", error);
+    return [];
   }
-
-  const data = await res.json();
-
-  return data.data;
 }
 
 export default async function HeroSection() {
@@ -46,7 +52,7 @@ export default async function HeroSection() {
         {/* Buttons */}
         <div className="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
           <Link href="/gears">
-            <Button className="flex items-center justify-center gap-2 px-6 py-3 font-semibold w-full">
+            <Button className="flex w-full items-center justify-center gap-2 px-6 py-3 font-semibold sm:w-auto">
               Explore Gears
               <ArrowRight className="size-5" />
             </Button>
@@ -58,7 +64,9 @@ export default async function HeroSection() {
         {/* Stats */}
         <div className="flex flex-wrap justify-center gap-8 pt-4 lg:justify-start">
           <div className="text-center lg:text-left">
-            <p className="text-2xl font-bold sm:text-3xl">500+</p>
+            <p className="text-2xl font-bold sm:text-3xl">
+              {gears.length > 0 ? `${gears.length}+` : "500+"}
+            </p>
             <p className="text-sm text-muted-foreground">Available Gears</p>
           </div>
 

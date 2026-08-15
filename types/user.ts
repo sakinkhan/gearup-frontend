@@ -20,6 +20,7 @@ export interface UpdateUserPayload {
   phone?: string;
   address?: string;
   image?: string;
+  password?: string;
 }
 
 export type CurrentUser = {

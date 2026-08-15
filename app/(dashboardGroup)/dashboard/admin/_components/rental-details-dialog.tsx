@@ -261,39 +261,34 @@ export function RentalDetailsDialog({
                 <h3 className="mb-3 font-semibold">Rental Progress</h3>
 
                 <div className="flex flex-wrap items-center gap-2">
-                  {[
-                    "PAID",
-                    "CONFIRMED",
-                    "PICKED_UP",
-                    "RETURNED",
-                    "COMPLETED",
-                  ].map((status, index) => {
-                    const statuses = [
-                      "PAID",
-                      "CONFIRMED",
-                      "PICKED_UP",
-                      "RETURNED",
-                      "COMPLETED",
-                    ];
+                  {["PAID", "CONFIRMED", "PICKED_UP", "RETURNED"].map(
+                    (status, index) => {
+                      const statuses = [
+                        "PAID",
+                        "CONFIRMED",
+                        "PICKED_UP",
+                        "RETURNED",
+                      ];
 
-                    const currentIndex = statuses.indexOf(order.status);
+                      const currentIndex = statuses.indexOf(order.status);
 
-                    const statusIndex = index;
+                      const statusIndex = index;
 
-                    const isCompleted = currentIndex >= statusIndex;
+                      const isCompleted = currentIndex >= statusIndex;
 
-                    return (
-                      <div key={status} className="flex items-center gap-2">
-                        <Badge variant={isCompleted ? "default" : "outline"}>
-                          {formatStatus(status as RentalOrderStatus)}
-                        </Badge>
+                      return (
+                        <div key={status} className="flex items-center gap-2">
+                          <Badge variant={isCompleted ? "default" : "outline"}>
+                            {formatStatus(status as RentalOrderStatus)}
+                          </Badge>
 
-                        {index < statuses.length - 1 && (
-                          <span className="text-muted-foreground">→</span>
-                        )}
-                      </div>
-                    );
-                  })}
+                          {index < statuses.length - 1 && (
+                            <span className="text-muted-foreground">→</span>
+                          )}
+                        </div>
+                      );
+                    },
+                  )}
                 </div>
               </div>
             </div>

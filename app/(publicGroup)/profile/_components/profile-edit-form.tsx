@@ -1,17 +1,18 @@
 import { PasswordInput } from "@/components/form/password-input";
 import { Button } from "@/components/ui/button";
 import { UpdateProfileFormValues } from "@/lib/validations/profile";
-import React from "react";
 import {
   FieldErrors,
   UseFormHandleSubmit,
   UseFormRegister,
+  UseFormWatch,
 } from "react-hook-form";
 
 type ProfileEditFormProps = {
   register: UseFormRegister<UpdateProfileFormValues>;
   errors: FieldErrors<UpdateProfileFormValues>;
   handleSubmit: UseFormHandleSubmit<UpdateProfileFormValues>;
+  watch: UseFormWatch<UpdateProfileFormValues>;
   onSubmit: (values: UpdateProfileFormValues) => void;
   onCancel: () => void;
   isDirty: boolean;
@@ -22,11 +23,14 @@ const ProfileEditForm = ({
   register,
   errors,
   handleSubmit,
+  watch,
   onSubmit,
   onCancel,
   isDirty,
   isPending,
 }: ProfileEditFormProps) => {
+  const password = watch("password");
+  const confirmPassword = watch("confirmPassword");
   return (
     <div>
       <form
@@ -113,19 +117,51 @@ const ProfileEditForm = ({
             </p>
           )}
         </div>
-        <PasswordInput
-          id="password"
-          placeholder="Leave blank to keep current password"
-          {...register("password")}
-          className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
-        />
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-foreground"
+          >
+            New Password
+          </label>
 
-        <PasswordInput
-          id="confirmPassword"
-          placeholder="Confirm password"
-          {...register("confirmPassword")}
-          className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
-        />
+          <PasswordInput
+            id="password"
+            placeholder="Leave blank to keep current password"
+            {...register("password")}
+            className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
+          />
+
+          {errors.password && (
+            <p className="mt-1 text-xs text-destructive">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        {password && (
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-foreground"
+            >
+              Confirm New Password
+            </label>
+
+            <PasswordInput
+              id="confirmPassword"
+              placeholder="Re-enter your new password"
+              {...register("confirmPassword")}
+              className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
+            />
+
+            {errors.confirmPassword && (
+              <p className="mt-1 text-xs text-destructive">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="flex items-center gap-3 pt-2">
           <Button

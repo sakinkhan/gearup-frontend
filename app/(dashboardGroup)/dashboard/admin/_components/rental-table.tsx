@@ -45,9 +45,6 @@ function getStatusVariant(status: RentalOrderStatus) {
     case "RETURNED":
       return "secondary";
 
-    case "COMPLETED":
-      return "default";
-
     case "CANCELLED":
       return "destructive";
 

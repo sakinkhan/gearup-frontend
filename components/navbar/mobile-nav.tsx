@@ -3,21 +3,9 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-
-import {
-  CreditCard,
-  LifeBuoy,
-  LogOut,
-  Menu,
-  Moon,
-  Settings,
-  User,
-} from "lucide-react";
-
+import { CreditCard, LifeBuoy, LogOut, Menu, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import {
   Sheet,
   SheetContent,
@@ -25,9 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-
 import { Separator } from "@/components/ui/separator";
-
 import GuestMenu from "./guest-menu";
 
 import { logout } from "@/app/service/logout";
@@ -165,7 +151,6 @@ export default function MobileNav({ user }: Props) {
 
                 <div className="min-w-0">
                   <p className="truncate font-medium">{user.name}</p>
-
                   <p className="truncate text-xs text-muted-foreground">
                     {user.email}
                   </p>
@@ -195,15 +180,7 @@ export default function MobileNav({ user }: Props) {
                   variant="ghost"
                   asChild
                   className="justify-start px-4 py-2 mx-4"
-                >
-                  <Link
-                    href="/dashboard/customer/billing"
-                    onClick={closeDrawer}
-                  >
-                    <CreditCard className="mr-2 size-5" />
-                    Billing
-                  </Link>
-                </Button>
+                ></Button>
 
                 <Button
                   variant="ghost"

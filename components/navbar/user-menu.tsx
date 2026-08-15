@@ -2,11 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import { Button } from "@/components/ui/button";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,15 +13,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { CreditCard, LifeBuoy, LogOut, Settings, User } from "lucide-react";
-
 import { toast } from "sonner";
-
 import { logout } from "@/app/service/logout";
 import { getInitials } from "@/app/utils/navbar-utils/utils";
-import { roleBadgeClasses } from "@/app/utils/navbar-utils/role-badge";
 import { NavbarUser } from "@/app/utils/navbar-utils/types";
+import { useCurrentUser } from "@/hooks/useUser";
 
 type Props = {
   user: NavbarUser;
@@ -37,11 +31,6 @@ const menuGroups = [
       href: "/profile",
       icon: User,
     },
-    {
-      label: "Billing",
-      href: "/dashboard/customer/billing",
-      icon: CreditCard,
-    },
   ],
   [
     {
@@ -52,7 +41,9 @@ const menuGroups = [
   ],
 ];
 
-export default function UserMenu({ user }: Props) {
+export default function UserMenu({ user: initialUser }: Props) {
+  const { data: currentUser } = useCurrentUser();
+  const user = currentUser ?? initialUser;
   const router = useRouter();
 
   async function handleLogout() {
