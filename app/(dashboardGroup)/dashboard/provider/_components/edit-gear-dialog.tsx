@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import {
   Dialog,
@@ -71,21 +72,31 @@ export function EditGearDialog({
 
     if (!gear) return;
 
-    await updateGear.mutateAsync({
-      id: gear.id,
-      payload: {
-        name,
-        brand,
-        description,
-        rentalPricePerDay: Number(rentalPricePerDay),
-        depositAmount: Number(depositAmount),
-        stock: Number(stock),
-        condition,
-        status,
-      },
-    });
+    try {
+      await updateGear.mutateAsync({
+        id: gear.id,
+        payload: {
+          name,
+          brand,
+          description,
+          rentalPricePerDay: Number(rentalPricePerDay),
+          depositAmount: Number(depositAmount),
+          stock: Number(stock),
+          condition,
+          status,
+        },
+      });
 
-    onOpenChange(false);
+      toast.success("Gear updated successfully!");
+
+      onOpenChange(false);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to update gear. Please try again.",
+      );
+    }
   };
 
   return (

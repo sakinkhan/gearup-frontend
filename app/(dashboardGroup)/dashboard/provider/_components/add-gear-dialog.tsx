@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { useCategories } from "@/hooks/use-categories";
 
 import {
   Dialog,
@@ -34,7 +35,7 @@ type AddGearDialogProps = {
 
 export function AddGearDialog({ open, onOpenChange }: AddGearDialogProps) {
   const createGear = useCreateProviderGear();
-
+  const { data: categories = [] } = useCategories();
   const [categoryName, setCategoryName] = useState("");
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
@@ -121,12 +122,23 @@ export function AddGearDialog({ open, onOpenChange }: AddGearDialogProps) {
           <div className="space-y-2">
             <Label>Category</Label>
 
-            <Input
+            <Select
               value={categoryName}
-              onChange={(event) => setCategoryName(event.target.value)}
-              placeholder="e.g. Water Sports"
+              onValueChange={setCategoryName}
               required
-            />
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+
+              <SelectContent>
+                {categories.map((category) => (
+                  <SelectItem key={category.id} value={category.name}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Name */}
